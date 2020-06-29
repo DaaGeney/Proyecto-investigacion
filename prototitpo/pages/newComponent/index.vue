@@ -95,7 +95,7 @@ export default {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         this.desserts.splice(index, 1);
-      deleteComponent({ id: item.id }).then(response => {
+      deleteComponent(item.id).then(response => {
         console.log("entro al delete");
       });
     }

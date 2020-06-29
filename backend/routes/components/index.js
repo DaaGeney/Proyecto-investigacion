@@ -15,8 +15,8 @@ router.get(
   "/getComponents",
   controller.getComponents
 );
-router.post(
-  "/deleteComponent",
+router.delete(
+  "/deleteComponent/:id",
   controller.deleteComponent
 );
 

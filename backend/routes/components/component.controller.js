@@ -8,7 +8,7 @@ function createComponent(req, res) {
   const name = req.body.name
   const info = req.body.info
 
-  let fun = (DB) => 
+  let fun = (DB) =>
     DB
       .collection(collection)
       .updateOne({ name },
@@ -79,9 +79,8 @@ function getComponents(req, res) {
   }
 }
 function deleteComponent(req, res) {
-  const { id } = req.body
-  console.log(req.body);
-  
+  const { id } = req.params
+
   let fun = (DB) =>
     DB.collection(collection).deleteOne(
       { _id: { $eq: ObjectId(id) } },

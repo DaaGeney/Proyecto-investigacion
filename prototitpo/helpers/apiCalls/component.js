@@ -7,6 +7,6 @@ export const createComponent = (body) => {
 export const getComponents = () => {
   return axios.get(`${url}/getComponents`);
 };
-export const deleteComponent = (body) => {
-  return axios.post(`${url}/deleteComponent`, body);
+export const deleteComponent = (id) => {
+  return axios.delete(`${url}/deleteComponent/${id}`);
 };
