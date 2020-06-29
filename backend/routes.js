@@ -1,8 +1,8 @@
-const gamificationComponent = require("./routes/gamificationComponent");
-const traditionalComponent = require("./routes/traditionalComponent");
+const gamificationComponent = require("./routes/components");
+
 
 
 module.exports = app => {
   app.use(gamificationComponent);
-  app.use(traditionalComponent)
+
 };

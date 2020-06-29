@@ -129,7 +129,7 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
           <v-btn color="blue darken-1" type="submit">Save</v-btn>
         </v-card-actions>
       </v-container>
@@ -137,7 +137,7 @@
   </v-card>
 </template>
 <script>
-import { createGamificationComponent } from "../../helpers/apiCalls/createComponent";
+import { createComponent } from "../../helpers/apiCalls/component";
 export default {
   data() {
     return {
@@ -166,8 +166,9 @@ export default {
       console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
         this.loading = true;
-        let dates = {
+        let info = {
           name: this.name,
+          info:{
           description: this.description,
           url: this.url,
           studentsTeam: this.studentsTeam,
@@ -178,9 +179,11 @@ export default {
           purpose: this.purpose,
           learningObjetive: this.learningObjetive,
           studentsInstructions: this.studentsInstructions,
-          instructorsInstructions: this.instructorsInstructions
+          instructorsInstructions: this.instructorsInstructions,
+          typeComponent:"gamificationComponent"
+          }
         };
-        createGamificationComponent(dates)
+        createComponent(info)
           .then(response => {
             this.$refs.form.reset();
             this.textSnackbar = "Created successfully";
@@ -194,6 +197,10 @@ export default {
             this.loading = false;
           });
       }
+    },
+    reset: function () {
+      this.$refs.form.reset();
+      this.$router.push(`/newComponent`);
     }
   }
 };

@@ -88,7 +88,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'CreateComponent',
-          to: '/newComponent/GamificationComponent'
+          to: '/newComponent/'
         }
       ],
       miniVariant: false,
