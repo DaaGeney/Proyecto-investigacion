@@ -6,7 +6,7 @@
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
         <v-row>
-          <v-subheader class="title">Create Gamification Component</v-subheader>
+          <v-subheader class="title">{{this.$route.query.action}} Gamification Component</v-subheader>
           <v-col cols="12">
             <v-text-field
               :rules="rules"
@@ -137,7 +137,11 @@
   </v-card>
 </template>
 <script>
-import { createComponent } from "../../helpers/apiCalls/component";
+import {
+  createComponent,
+  updateComponent,
+  getComponent
+} from "../../helpers/apiCalls/component";
 export default {
   data() {
     return {
@@ -150,7 +154,7 @@ export default {
       url: "",
       studentsTeam: "",
       length: "",
-      space: 0,
+      space: "",
       materials: "",
       subjectMatter: "",
       purpose: "",
@@ -158,47 +162,84 @@ export default {
       studentsInstructions: "",
       instructorsInstructions: "",
       files: [],
-      rules: [v => !!v || "it's necessary"]
+      rules: [v => !!v || "it's necessary"],
+      action:""
     };
+  },
+  mounted() {
+    this.action = this.$route.query.action;
+    if (this.action == "Update") {
+      getComponent(this.$route.query.name).then(response => {
+        console.log(response.data.data)
+        this.name = response.data.data.name;
+        this.description = response.data.data.info.description;
+        this.url = response.data.data.info.url;
+        this.studentsTeam = response.data.data.info.studentsTeam;
+        this.length = response.data.data.info.length;
+        response.data.data.info.space = this.space;
+        this.materials = response.data.data.info.materials;
+        this.subjectMatter = response.data.data.info.subjectMatter;
+        this.purpose = response.data.data.info.purpose;
+        this.learningObjetive = response.data.data.info.learningObjetive;
+        this.studentsInstructions =
+          response.data.data.info.studentsInstructions;
+        this.instructorsInstructions =
+          response.data.data.info.instructorsInstructions;
+        this.typeComponent = "Gamification";
+      });
+    }
   },
   methods: {
     createGamification: function() {
-      console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
         this.loading = true;
         let info = {
           name: this.name,
-          info:{
-          description: this.description,
-          url: this.url,
-          studentsTeam: this.studentsTeam,
-          length: this.length,
-          space: this.space,
-          materials: this.materials,
-          subjectMatter: this.subjectMatter,
-          purpose: this.purpose,
-          learningObjetive: this.learningObjetive,
-          studentsInstructions: this.studentsInstructions,
-          instructorsInstructions: this.instructorsInstructions,
-          typeComponent:"gamificationComponent"
+          info: {
+            description: this.description,
+            url: this.url,
+            studentsTeam: this.studentsTeam,
+            length: this.length,
+            space: this.space,
+            materials: this.materials,
+            subjectMatter: this.subjectMatter,
+            purpose: this.purpose,
+            learningObjetive: this.learningObjetive,
+            studentsInstructions: this.studentsInstructions,
+            instructorsInstructions: this.instructorsInstructions,
+            typeComponent: "Gamification"
           }
         };
-        createComponent(info)
-          .then(response => {
-            this.$refs.form.reset();
-            this.textSnackbar = "Created successfully";
-            this.snackbarSuccess = true;
-            this.loading = false;
-          })
-          .catch(error => {
-            console.log(error.status);
-            this.textSnackbar = "This component already exists";
-            this.snackbar = true;
-            this.loading = false;
-          });
+        if (this.action == "Update") {
+          updateComponent(this.$route.query.name, info)
+            .then(response => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Updated successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            })
+            .catch(error => {
+              this.textSnackbar = "Error";
+              this.snackbar = true;
+              this.loading = false;
+            });
+        } else {
+          createComponent(info)
+            .then(response => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Created successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            })
+            .catch(error => {
+              this.textSnackbar = "This component already exists";
+              this.snackbar = true;
+              this.loading = false;
+            });
+        }
       }
     },
-    reset: function () {
+    reset: function() {
       this.$refs.form.reset();
       this.$router.push(`/newComponent`);
     }

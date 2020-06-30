@@ -6,28 +6,28 @@
           <v-toolbar-title>Components</v-toolbar-title>
 
           <v-spacer></v-spacer>
-          <v-menu bottom origin="center center" transition="scale-transition" >
+          <v-menu bottom origin="center center" transition="scale-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark v-bind="attrs" v-on="on">Create Component</v-btn>
             </template>
 
             <v-list>
-              <v-list-item to="/newComponent/GamificationComponent">
+              <v-list-item to="/newComponent/GamificationComponent?action=Create">
                 <v-list-item-title>Gamification Component</v-list-item-title>
               </v-list-item>
             </v-list>
             <v-list>
-              <v-list-item to="/newComponent/traditionalComponent">
+              <v-list-item to="/newComponent/traditionalComponent?action=Create">
                 <v-list-item-title>Traditional Component</v-list-item-title>
               </v-list-item>
             </v-list>
             <v-list>
-              <v-list-item to="/newComponent/additionalComponent?typeComponent=Web2.0">
+              <v-list-item to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create">
                 <v-list-item-title>Web 2.0 Component</v-list-item-title>
               </v-list-item>
             </v-list>
             <v-list>
-              <v-list-item to="/newComponent/additionalComponent?typeComponent=Technological">
+              <v-list-item to="/newComponent/additionalComponent?typeComponent=Technological&action=Create">
                 <v-list-item-title>Technological Component</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -49,7 +49,6 @@ import {
 } from "../../helpers/apiCalls/component";
 export default {
   data: () => ({
-    dialog: false,
     headers: [
       {
         text: "Name",
@@ -86,9 +85,20 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      if (item.type == "Gamification") {
+        this.$router.push(
+          `/newComponent/GamificationComponent?action=Update&name=${item.name}`
+        );
+      }
+      if (item.type == "Traditional") {
+        this.$router.push(
+          `/newComponent/traditionalComponent?action=Update&name=${item.name}`
+        );
+      }
+      if (item.type == "Technological" || item.type == "Web2.0")
+        this.$router.push(
+          `/newComponent/additionalComponent?typeComponent=${item.type}&action=Update&name=${item.name}`
+        );
     },
 
     deleteItem(item) {

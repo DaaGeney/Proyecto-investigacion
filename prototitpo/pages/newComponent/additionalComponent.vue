@@ -6,7 +6,7 @@
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
         <v-row>
-          <v-subheader class="title">Create {{this.$route.query.typeComponent}} Component</v-subheader>
+          <v-subheader class="title">{{this.$route.query.action}} {{this.$route.query.typeComponent}} Component</v-subheader>
           <v-col cols="12">
             <v-text-field
               :rules="rules"
@@ -39,7 +39,11 @@
   </v-card>
 </template>
 <script>
-import { createComponent } from "../../helpers/apiCalls/component";
+import {
+  createComponent,
+  getComponent,
+  updateComponent
+} from "../../helpers/apiCalls/component";
 export default {
   data() {
     return {
@@ -51,40 +55,61 @@ export default {
       description: "",
       url: "",
       files: [],
-      rules: [v => !!v || "it's necessary"]
+      rules: [v => !!v || "it's necessary"],
+      action: ""
     };
+  },
+  mounted() {
+    this.action = this.$route.query.action;
+    if (this.action == "Update") {
+      console.log("datos traido",this.$route.query.name)
+      getComponent(this.$route.query.name).then(response => {
+        this.name = response.data.data.name;
+        this.description = response.data.data.info.description;
+        this.url = response.data.data.info.url;
+        console.log("datos traido",response)
+     
+      });
+    }
   },
   methods: {
     createGamification: function() {
-      console.log(this.$refs.form.validate());
+      
       if (this.$refs.form.validate()) {
         this.loading = true;
         let info = {
           name: this.name,
-          info:{
-          description: this.description,
-          url: this.url,
-          attachments:this.attachments,
-          typeComponent:this.$route.query.typeComponent
+          info: {
+            description: this.description,
+            url: this.url,
+            typeComponent: this.$route.query.typeComponent
           }
-        };
-       
-        createComponent(info)
-          .then(response => {
-            this.$refs.form.reset();
-            this.textSnackbar = "Created successfully";
-            this.snackbarSuccess = true;
-            this.loading = false;
-          })
-          .catch(error => {
-            console.log(error.status);
-            this.textSnackbar = "This component already exists";
-            this.snackbar = true;
-            this.loading = false;
-          });
+        }; 
+        if (this.action == "Update") {
+            updateComponent(this.$route.query.name,info).then(then=>{
+              this.$refs.form.reset();
+              this.textSnackbar = "Updated successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            })
+        } else {
+          createComponent(info)
+            .then(response => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Created successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            })
+            .catch(error => {
+              console.log(error.status);
+              this.textSnackbar = "This component already exists";
+              this.snackbar = true;
+              this.loading = false;
+            });
+        }
       }
     },
-    reset: function () {
+    reset: function() {
       this.$refs.form.reset();
       this.$router.push(`/newComponent`);
     }
