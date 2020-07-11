@@ -60,8 +60,8 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          title: 'Gamification Experience',
+          to: '/gamificationExperience/subjectMatter'
         },
         {
           icon: 'mdi-file-document-edit-outline',
@@ -70,7 +70,6 @@ export default {
         }
       ],
       miniVariant: false,
-      
       rightDrawer: false,
       title: 'Methodological Gamification'
     }

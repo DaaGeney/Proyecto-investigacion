@@ -5,36 +5,24 @@
     <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
+        <div>
+          <v-breadcrumbs :items="items">
+            <template v-slot:divider>
+              <v-icon>mdi-forward</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
         <v-row>
           <v-subheader class="title">{{this.$route.query.action}} traditional Component</v-subheader>
           <v-col cols="12">
-            <v-text-field
-              :rules="rules"
-              v-model="name"
-              label="Name"
-              filled
-              shaped
-              required
-              outlined
-            ></v-text-field>
-            <v-textarea
-              :rules="rules"
-              v-model="description"
-              label="Description"
-              rows="1"
-              outlined
-              filled
-              shaped
-            ></v-textarea>
-            <v-text-field :rules="rules" v-model="url" label="URL" filled shaped required outlined></v-text-field>
+            <v-text-field :rules="rules" v-model="name" label="Name" ></v-text-field>
+            <v-textarea :rules="rules" v-model="description" label="Description" rows="1"></v-textarea>
+            <v-text-field :rules="rules" v-model="url" label="URL" f required ></v-text-field>
 
             <v-file-input
               :rules="rules"
               v-model="files"
               small-chips
-              filled
-              outlined
-              shaped
               counter
               :show-size="1000"
               multiple
@@ -69,14 +57,31 @@ export default {
       url: "",
       files: [],
       rules: [v => !!v || "it's necessary"],
-      action: ""
+      action: "",
+      items: [
+        {
+          text: "Index ",
+          disabled: false,
+          to: "/"
+        },
+        {
+          text: "Manage Components",
+          disabled: false,
+          to: "/NewComponent"
+        },
+        {
+          text: `${this.$route.query.action} Traditional Component`,
+          disabled: true,
+          to: "/NewComponent/traditionalComponent"
+        }
+      ]
     };
   },
-  mounted(){
+  mounted() {
     this.action = this.$route.query.action;
     if (this.action == "Update") {
       getComponent(this.$route.query.name).then(response => {
-        console.log(response.data.data)
+        console.log(response.data.data);
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
         this.url = response.data.data.info.url;

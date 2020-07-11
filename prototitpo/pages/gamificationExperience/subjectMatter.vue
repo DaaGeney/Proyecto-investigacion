@@ -1,0 +1,105 @@
+<template>
+  <v-card flat>
+    <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{ textSnackbar }}</v-snackbar>
+    <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{ textSnackbar }}</v-snackbar>
+    <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
+
+    <v-form ref="form" v-on:submit.prevent="createSubjectMatter" lazy-validation>
+      <v-container>
+        <div>
+          <v-breadcrumbs :items="items">
+            <template v-slot:divider>
+              <v-icon>mdi-forward</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
+        <v-row>
+          <v-subheader class="title">{{this.$route.query.action}} Define Subject Matter</v-subheader>
+          <v-col cols="12">
+            <v-text-field :rules="rules" v-model="topic" label="Topic" required></v-text-field>
+            <v-text-field :rules="rules" v-model="subject" label="Subject" required></v-text-field>
+            <v-text-field :rules="rules" v-model="level" label="Level" required></v-text-field>
+            <v-text-field :rules="rules" v-model="program" label="Program" required></v-text-field>
+           </v-col>
+        </v-row>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
+          <v-btn color="blue darken-1" type="submit">Save</v-btn>
+        </v-card-actions>
+      </v-container>
+    </v-form>
+    
+  </v-card>
+</template>
+<script>
+import {
+  createSubject
+} from "../../helpers/apiCalls/subjectMatter";
+
+export default {
+  data() {
+    return {
+      
+      loading: false,
+      snackbarSuccess: false,
+      snackbar: false,
+      textSnackbar: "",
+      subject: "",
+      level: "",
+      program: "",
+     topic: "",
+      rules: [v => !!v || "it's necessary"],
+      items: [
+        {
+          text: "Index ",
+          disabled: false,
+          to: "/"
+        },
+
+        {
+          text: `Define Subject Matter`,
+          disabled: true,
+          to: "/"
+        }
+      ],
+      
+    };
+  },
+  mounted() {
+    
+  },
+  methods: {
+    createSubjectMatter: function() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        let info = {
+          topic: this.topic,
+          subject: this.subject,
+          level: this.level,
+          program: this.program
+        };
+        
+          createSubject( info)
+            .then(response => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Created successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            })
+            .catch(error => {
+              this.textSnackbar = "This topic already exists";
+              this.snackbar = true;
+              this.loading = false;
+            });
+        
+      }
+    },
+    reset: function() {
+      this.$refs.form.reset();
+      this.$router.push(`/`);
+    },
+    
+  }
+};
+</script>

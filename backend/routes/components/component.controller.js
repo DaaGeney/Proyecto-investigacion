@@ -11,13 +11,12 @@ function createComponent(req, res) {
   let fun = (DB) =>
     DB
       .collection(collection)
-      .updateOne({ name },
-        { $set: { info } },
+      .update({ name },
+        { $setOnInsert: { info } },
         { upsert: true },
         (err, item) => {
           if (err) throw err;
-
-          if (item.upsertedCount > 0) {
+          if (item.result.upserted) {
             res.status(201).send({
               status: true,
               data: { info },
@@ -81,7 +80,7 @@ function getComponents(req, res) {
 
 function getComponent(req, res) {
   const { name } = req.params
-  console.log(req.params)
+
   let fun = (DB) =>
     DB
       .collection(collection)
