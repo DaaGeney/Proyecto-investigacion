@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("./subject.controller");
+const controller = require("./experience.controller");
 
 
 // router.get('/hola', function (req, res) {
@@ -9,13 +9,9 @@ const controller = require("./subject.controller");
 
 
 router.post(
-  "/newSubject",
-  controller.createSubject
+  "/newExperience",
+  controller.createExperience
 );
 
-router.get(
-  "/getSubjects",
-  controller.getSubjects
-);
 
 module.exports = router;

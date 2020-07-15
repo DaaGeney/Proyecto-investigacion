@@ -16,31 +16,27 @@
         <v-row>
           <v-subheader class="title">{{this.$route.query.action}} Define Subject Matter</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="topic" label="Topic" required></v-text-field>
-            <v-text-field :rules="rules" v-model="subject" label="Subject" required></v-text-field>
-            <v-text-field :rules="rules" v-model="level" label="Level" required></v-text-field>
-            <v-text-field :rules="rules" v-model="program" label="Program" required></v-text-field>
-           </v-col>
+            <v-text-field :rules="rules" counter v-model="topic" label="Topic" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="subject" label="Subject" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="level" label="Level" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="program" label="Program" required></v-text-field>
+          </v-col>
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
+          <v-btn color="blue darken-1" text to="/gamificationExperience" >Cancel</v-btn>
           <v-btn color="blue darken-1" type="submit">Save</v-btn>
         </v-card-actions>
       </v-container>
     </v-form>
-    
   </v-card>
 </template>
 <script>
-import {
-  createSubject
-} from "../../helpers/apiCalls/subjectMatter";
+import { createSubject } from "../../helpers/apiCalls/subjectMatter";
 
 export default {
   data() {
     return {
-      
       loading: false,
       snackbarSuccess: false,
       snackbar: false,
@@ -48,7 +44,7 @@ export default {
       subject: "",
       level: "",
       program: "",
-     topic: "",
+      topic: "",
       rules: [v => !!v || "it's necessary"],
       items: [
         {
@@ -56,19 +52,21 @@ export default {
           disabled: false,
           to: "/"
         },
-
+        {
+          text: "Gamification Experience",
+          disabled: false,
+          href: '/gamificationExperience/'
+        },  
+       
         {
           text: `Define Subject Matter`,
           disabled: true,
           to: "/"
         }
-      ],
-      
+      ]
     };
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     createSubjectMatter: function() {
       if (this.$refs.form.validate()) {
@@ -79,27 +77,25 @@ export default {
           level: this.level,
           program: this.program
         };
-        
-          createSubject( info)
-            .then(response => {
-              this.$refs.form.reset();
-              this.textSnackbar = "Created successfully";
-              this.snackbarSuccess = true;
-              this.loading = false;
-            })
-            .catch(error => {
-              this.textSnackbar = "This topic already exists";
-              this.snackbar = true;
-              this.loading = false;
-            });
-        
+
+        createSubject(info)
+          .then(response => {
+            this.$refs.form.reset();
+            this.textSnackbar = "Created successfully";
+            this.snackbarSuccess = true;
+            this.loading = false;
+          })
+          .catch(error => {
+            this.textSnackbar = "This topic already exists";
+            this.snackbar = true;
+            this.loading = false;
+          });
       }
     },
     reset: function() {
       this.$refs.form.reset();
       this.$router.push(`/`);
-    },
-    
+    }
   }
 };
 </script>

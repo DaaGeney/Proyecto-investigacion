@@ -17,9 +17,9 @@
             class="title"
           >{{this.$route.query.action}} {{this.$route.query.typeComponent}} Component</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="name" label="Name" required></v-text-field>
-            <v-textarea :rules="rules" v-model="description" label="Description" rows="1"></v-textarea>
-            <v-text-field :rules="rules" v-model="url" label="URL" required></v-text-field>
+            <v-text-field :rules="rules" v-model="name" label="Name" counter required></v-text-field>
+            <v-textarea :rules="rules" v-model="description" label="Description" counter rows="1"></v-textarea>
+            <v-text-field :rules="rules" v-model="url" label="URL" counter required></v-text-field>
           </v-col>
         </v-row>
         <v-card-actions>

@@ -15,9 +15,9 @@
         <v-row>
           <v-subheader class="title">{{this.$route.query.action}} traditional Component</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="name" label="Name" ></v-text-field>
-            <v-textarea :rules="rules" v-model="description" label="Description" rows="1"></v-textarea>
-            <v-text-field :rules="rules" v-model="url" label="URL" f required ></v-text-field>
+            <v-text-field :rules="rules" v-model="name" label="Name" counter ></v-text-field>
+            <v-textarea :rules="rules" v-model="description" counter label="Description" rows="1"></v-textarea>
+            <v-text-field :rules="rules" v-model="url" label="URL" counter required ></v-text-field>
 
             <v-file-input
               :rules="rules"

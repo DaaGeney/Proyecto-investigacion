@@ -61,7 +61,7 @@ export default {
         {
           icon: 'mdi-apps',
           title: 'Gamification Experience',
-          to: '/gamificationExperience/subjectMatter'
+          to: '/gamificationExperience/'
         },
         {
           icon: 'mdi-file-document-edit-outline',
