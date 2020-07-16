@@ -45,6 +45,7 @@ import {
   getComponent,
   updateComponent
 } from "../../helpers/apiCalls/component";
+import { createFile} from "../../helpers/apiCalls/file"
 export default {
   data() {
     return {
@@ -74,7 +75,8 @@ export default {
           disabled: true,
           to: "/NewComponent/traditionalComponent"
         }
-      ]
+      ],
+      typeComponent : "Traditional"
     };
   },
   mounted() {
@@ -99,9 +101,10 @@ export default {
             description: this.description,
             url: this.url,
             attachments: this.attachments,
-            typeComponent: "Traditional"
+            typeComponent: this.typeComponent
           }
         };
+        this.sendNewFile()
         if (this.action == "Update") {
           updateComponent(this.$route.query.name, info)
             .then(response => {
@@ -134,6 +137,14 @@ export default {
     reset: function() {
       this.$refs.form.reset();
       this.$router.push(`/newComponent`);
+    },
+    sendNewFile(){
+      let formData = new FormData()
+      // formData.append("file",this.files[0])
+      this.files.forEach(element => {
+        formData.append(element.name,element)
+      });
+      createFile(formData,this.typeComponent,this.name)
     }
   }
 };

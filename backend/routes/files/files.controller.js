@@ -2,7 +2,6 @@ var fs = require('fs');
 var {config} = require("../../config/index")
 
 function newFile(req, res) {
-  let file =req.files.file
   const { typeComponent,nameComponent } = req.params
   
   const base = `${config.folderBase}${typeComponent}/${nameComponent}`

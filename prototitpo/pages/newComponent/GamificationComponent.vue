@@ -127,7 +127,7 @@ import {
   getObjetives
 } from "../../helpers/apiCalls/learningObjetives";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
-import { createFile} from "../../helpers/apiCalls/file"
+import { createFile} from "../../helpers/apiCalls/file" 
 export default {
   data() {
     return {
@@ -204,6 +204,7 @@ export default {
   },
   methods: {
     createGamification: function() {
+      
       if (this.$refs.form.validate()) {
         console.log(this.files);
         this.loading = true;
@@ -225,7 +226,7 @@ export default {
             
           }
         };
-        console.log(info.info.file);
+        
         if (this.action == "Update") {
           updateComponent(this.$route.query.name, info)
             .then(response => {
@@ -240,13 +241,16 @@ export default {
               this.loading = false;
             });
         } else {
-        this.sendNewFile()
+        
           createComponent(info)
             .then(response => {
+               this.sendNewFile()
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";
               this.snackbarSuccess = true;
+             
               this.loading = false;
+              
             })
             .catch(error => {
               this.textSnackbar = "This component already exists";
