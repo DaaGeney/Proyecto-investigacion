@@ -127,6 +127,7 @@ import {
   getObjetives
 } from "../../helpers/apiCalls/learningObjetives";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
+import { createFile} from "../../helpers/apiCalls/file"
 export default {
   data() {
     return {
@@ -152,6 +153,7 @@ export default {
       studentsInstructions: "",
       instructorsInstructions: "",
       files: [],
+      typeComponent:"Gamification",
       rules: [v => !!v || "it's necessary"],
       items: [
         {
@@ -196,13 +198,12 @@ export default {
           response.data.data.info.studentsInstructions;
         this.instructorsInstructions =
           response.data.data.info.instructorsInstructions;
-        this.typeComponent = "Gamification";
+        this.typeComponent = this.typeComponent;
       });
     }
   },
   methods: {
     createGamification: function() {
-      this.getBase64(this.files[0])
       if (this.$refs.form.validate()) {
         console.log(this.files);
         this.loading = true;
@@ -220,9 +221,11 @@ export default {
             learningObjetive: this.learningObjetive,
             studentsInstructions: this.studentsInstructions,
             instructorsInstructions: this.instructorsInstructions,
-            typeComponent: "Gamification"
+            typeComponent: this.typeComponent,
+            
           }
         };
+        console.log(info.info.file);
         if (this.action == "Update") {
           updateComponent(this.$route.query.name, info)
             .then(response => {
@@ -237,6 +240,7 @@ export default {
               this.loading = false;
             });
         } else {
+        this.sendNewFile()
           createComponent(info)
             .then(response => {
               this.$refs.form.reset();
@@ -278,15 +282,14 @@ export default {
           this.snackbar = true;
         });
     },
-    getBase64(file) {
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function() {
-        console.log(reader.result);
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
+    sendNewFile(){
+      let formData = new FormData()
+      // formData.append("file",this.files[0])
+      this.files.forEach(element => {
+        formData.append(element.name,element)
+      });
+      console.log(this.typeComponent,this.name)
+      createFile(formData,this.typeComponent,this.name)
     }
   }
 };

@@ -7,7 +7,7 @@ const collection = "components"
 function createComponent(req, res) {
   const name = req.body.name
   const info = req.body.info
-
+  console.log(info)
   let fun = (DB) =>
     DB
       .collection(collection)
