@@ -6,20 +6,48 @@
 
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
-        <div>
-          <v-breadcrumbs :items="items">
-            <template v-slot:divider>
-              <v-icon>mdi-forward</v-icon>
-            </template>
-          </v-breadcrumbs>
-        </div>
+        <v-row>
+          <v-col cols="12" sm="11">
+            <div>
+              <v-breadcrumbs :items="items">
+                <template v-slot:divider>
+                  <v-icon>mdi-forward</v-icon>
+                </template>
+              </v-breadcrumbs>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="1">
+            <v-tooltip v-model="showBack" top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on" @click="$router.go(-1)">
+                  <v-icon>mdi-keyboard-backspace</v-icon>
+                </v-btn>
+              </template>
+              <span>Back</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+
         <v-row>
           <v-subheader class="title">{{this.$route.query.action}} Gamification Component</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="name" label="Name" counter  required></v-text-field>
-            <v-textarea :rules="rules" v-model="description" counter label="Description" rows="1" required></v-textarea>
+            <v-text-field :rules="rules" v-model="name" label="Name" counter required></v-text-field>
+            <v-textarea
+              :rules="rules"
+              v-model="description"
+              counter
+              label="Description"
+              rows="1"
+              required
+            ></v-textarea>
             <v-text-field :rules="rules" v-model="url" label="URL" counter required></v-text-field>
-            <v-text-field :rules="rules" v-model="studentsTeam" counter label="Students per team" required></v-text-field>
+            <v-text-field
+              :rules="rules"
+              v-model="studentsTeam"
+              counter
+              label="Students per team"
+              required
+            ></v-text-field>
             <v-textarea :rules="rules" v-model="length" label="Length" counter required rows="1"></v-textarea>
             <v-text-field :rules="rules" v-model="space" label="Space" counter required></v-text-field>
             <v-text-field :rules="rules" v-model="materials" label="Materials" counter required></v-text-field>
@@ -62,14 +90,16 @@
               :rules="rules"
               v-model="studentsInstructions"
               label="Students instructions"
-              required counter
+              required
+              counter
               rows="1"
             ></v-textarea>
             <v-textarea
               :rules="rules"
               v-model="instructorsInstructions"
               label="Instructors instructions"
-              required counter
+              required
+              counter
               rows="1"
             ></v-textarea>
 
@@ -127,7 +157,7 @@ import {
   getObjetives
 } from "../../helpers/apiCalls/learningObjetives";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
-import { createFile} from "../../helpers/apiCalls/file" 
+import { createFile } from "../../helpers/apiCalls/file";
 export default {
   data() {
     return {
@@ -153,7 +183,7 @@ export default {
       studentsInstructions: "",
       instructorsInstructions: "",
       files: [],
-      typeComponent:"Gamification",
+      typeComponent: "Gamification",
       rules: [v => !!v || "it's necessary"],
       items: [
         {
@@ -204,7 +234,6 @@ export default {
   },
   methods: {
     createGamification: function() {
-      
       if (this.$refs.form.validate()) {
         console.log(this.files);
         this.loading = true;
@@ -222,11 +251,10 @@ export default {
             learningObjetive: this.learningObjetive,
             studentsInstructions: this.studentsInstructions,
             instructorsInstructions: this.instructorsInstructions,
-            typeComponent: this.typeComponent,
-            
+            typeComponent: this.typeComponent
           }
         };
-        
+
         if (this.action == "Update") {
           updateComponent(this.$route.query.name, info)
             .then(response => {
@@ -241,16 +269,14 @@ export default {
               this.loading = false;
             });
         } else {
-        
           createComponent(info)
             .then(response => {
-               this.sendNewFile()
+              this.sendNewFile();
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";
               this.snackbarSuccess = true;
-             
+
               this.loading = false;
-              
             })
             .catch(error => {
               this.textSnackbar = "This component already exists";
@@ -262,7 +288,7 @@ export default {
     },
     reset: function() {
       this.$refs.form.reset();
-      this.$router.push(`/newComponent`);
+      this.$router.go(-1)
     },
     getAllObjetives: function() {
       getObjetives().then(response => {
@@ -286,14 +312,14 @@ export default {
           this.snackbar = true;
         });
     },
-    sendNewFile(){
-      let formData = new FormData()
+    sendNewFile() {
+      let formData = new FormData();
       // formData.append("file",this.files[0])
       this.files.forEach(element => {
-        formData.append(element.name,element)
+        formData.append(element.name, element);
       });
-      console.log(this.typeComponent,this.name)
-      createFile(formData,this.typeComponent,this.name)
+      console.log(this.typeComponent, this.name);
+      createFile(formData, this.typeComponent, this.name);
     }
   }
 };

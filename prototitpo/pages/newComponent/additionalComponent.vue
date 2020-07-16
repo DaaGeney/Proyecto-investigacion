@@ -5,13 +5,27 @@
     <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
-        <div>
-          <v-breadcrumbs :items="items">
-            <template v-slot:divider>
-              <v-icon>mdi-forward</v-icon>
-            </template>
-          </v-breadcrumbs>
-        </div>
+        <v-row>
+          <v-col cols="12" sm="11">
+            <div>
+              <v-breadcrumbs :items="items">
+                <template v-slot:divider>
+                  <v-icon>mdi-forward</v-icon>
+                </template>
+              </v-breadcrumbs>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="1">
+            <v-tooltip v-model="show" top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on" @click="$router.go(-1)">
+                  <v-icon>mdi-keyboard-backspace</v-icon>
+                </v-btn>
+              </template>
+              <span>Back</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
         <v-row>
           <v-subheader
             class="title"
@@ -24,7 +38,7 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="reset;" >Cancel</v-btn>
           <v-btn color="blue darken-1" type="submit">Save</v-btn>
         </v-card-actions>
       </v-container>
@@ -119,7 +133,7 @@ export default {
     },
     reset: function() {
       this.$refs.form.reset();
-      this.$router.push(`/newComponent`);
+      this.$router.go(-1)
     }
   }
 };
