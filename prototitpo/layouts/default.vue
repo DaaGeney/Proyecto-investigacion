@@ -58,15 +58,16 @@ export default {
       drawer: true,
       fixed: false,
       items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Gamification Experience',
-          to: '/gamificationExperience/'
-        },
+       
         {
           icon: 'mdi-file-document-edit-outline',
           title: 'Manage components',
           to: '/newComponent/'
+        },
+         {
+          icon: 'mdi-table-edit',
+          title: 'Gamification Experience',
+          to: '/gamificationExperience/'
         }
       ],
       miniVariant: false,

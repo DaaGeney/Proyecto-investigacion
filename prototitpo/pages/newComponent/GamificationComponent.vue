@@ -141,6 +141,13 @@
             <v-btn color="primary" text @click="dialog = false;$refs.form2.reset()">Disagree</v-btn>
             <v-btn color="primary" text @click="addNewObjetive">Agree</v-btn>
           </v-card-actions>
+          <v-progress-linear
+            :active="charging"
+            :indeterminate="charging"
+            absolute
+            bottom
+            color="primary"
+          ></v-progress-linear>
         </v-card>
       </v-form>
     </v-dialog>
@@ -162,6 +169,7 @@ export default {
   data() {
     return {
       list: [],
+      charging: false,
       listSubject: [],
       show: false,
       dialog: false,
@@ -288,7 +296,7 @@ export default {
     },
     reset: function() {
       this.$refs.form.reset();
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     getAllObjetives: function() {
       getObjetives().then(response => {
@@ -299,18 +307,23 @@ export default {
       });
     },
     addNewObjetive: function() {
-      createObjetive(this.infoObjetive)
-        .then(response => {
-          this.getAllObjetives();
-          this.$refs.form2.reset();
-          this.dialog = false;
-          this.textSnackbar = "Learning Objetive created successfully";
-          this.snackbarSuccess = true;
-        })
-        .catch(error => {
-          this.textSnackbar = "This learning objetive already exists";
-          this.snackbar = true;
-        });
+      if (this.$refs.form2.validate()) {
+        this.charging = true;
+        createObjetive(this.infoObjetive)
+          .then(response => {
+            this.getAllObjetives();
+            this.$refs.form2.reset();
+            this.dialog = false;
+            this.textSnackbar = "Learning Objetive created successfully";
+            this.snackbarSuccess = true;
+            this.charging = false;
+          })
+          .catch(error => {
+            this.textSnackbar = "This learning objetive already exists";
+            this.snackbar = true;
+            this.charging = false;
+          });
+      }
     },
     sendNewFile() {
       let formData = new FormData();

@@ -19,7 +19,7 @@
         hide-details
       ></v-text-field>
       </v-card-title>
-    <v-data-table :headers="headers" :items="desserts" :search="search" sort-by="calories" class="elevation-1">
+    <v-data-table :headers="headers" :items="desserts" loading="getData"  loading-text="Loading... Please wait" :search="search" sort-by="calories" class="elevation-1">
       <template v-slot:top>
         
         <v-toolbar flat color="white">
@@ -134,6 +134,7 @@ export default {
   data: () => ({
     show: {
       name: "",
+      getData:true,
       info: {
         description: "",
         typeComponent: "",
@@ -194,6 +195,7 @@ export default {
               info: aux[i].info
             };
             this.desserts.push(temp);
+            this.getData=false
           }
         })
         .catch(error => {});
