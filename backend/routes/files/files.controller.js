@@ -5,8 +5,6 @@ function newFile(req, res) {
   const { typeComponent,nameComponent } = req.params
   
   const base = `${config.folderBase}${typeComponent}/${nameComponent}`
-  
-
   fs.mkdir(base, { recursive: true }, (err) => {
     if (err) throw err;
   });

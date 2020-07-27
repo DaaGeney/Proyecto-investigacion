@@ -172,6 +172,7 @@ export default {
       charging: false,
       listSubject: [],
       show: false,
+      showBack: false,
       dialog: false,
       action: "",
       loading: false,
@@ -266,7 +267,8 @@ export default {
         if (this.action == "Update") {
           updateComponent(this.$route.query.name, info)
             .then(response => {
-              this.$refs.form.reset();
+              this.sendNewFile();
+            
               this.textSnackbar = "Updated successfully";
               this.snackbarSuccess = true;
               this.loading = false;
@@ -326,13 +328,15 @@ export default {
       }
     },
     sendNewFile() {
-      let formData = new FormData();
-      // formData.append("file",this.files[0])
-      this.files.forEach(element => {
-        formData.append(element.name, element);
-      });
-      console.log(this.typeComponent, this.name);
-      createFile(formData, this.typeComponent, this.name);
+      if (this.files.length > 0) {
+        let formData = new FormData();
+        // formData.append("file",this.files[0])
+        this.files.forEach(element => {
+          formData.append(element.name, element);
+        });
+        console.log(this.typeComponent, this.name);
+        createFile(formData, this.typeComponent, this.name);
+      }
     }
   }
 };

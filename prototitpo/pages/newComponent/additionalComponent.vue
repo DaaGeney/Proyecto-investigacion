@@ -38,7 +38,7 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset;" >Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="reset" >Cancel</v-btn>
           <v-btn color="blue darken-1" type="submit">Save</v-btn>
         </v-card-actions>
       </v-container>
@@ -54,6 +54,7 @@ import {
 export default {
   data() {
     return {
+      show:false,
       loading: false,
       snackbarSuccess: false,
       snackbar: false,

@@ -4,22 +4,32 @@ var ObjectId = require('mongodb').ObjectID;
 
 const collection = "Experience"
 
+
 function createExperience(req, res) {
-  const { data } = req.body
+  const { name, description, subjectMatter, data} = req.body
 
-
+  
   let fun = (DB) =>
     DB
       .collection(collection)
-      .insert({ data },
+      .update({ name },
+        { $setOnInsert: { description,subjectMatter,data } },
+        { upsert: true },
         (err, item) => {
           if (err) throw err;
-          console.log(req.body)
-          res.status(201).send({
-            status: true,
-            data: { data },
-            message: "Experiencia creada correctamente",
-          });
+          if (item.result.upserted) {
+            res.status(201).send({
+              status: true,
+              data: { name, description, subjectMatter, data },
+              message: "Experiencia creada correctamente",
+            });
+          } else {
+            res.status(404).send({
+              status: false,
+              data: [],
+              message: "Experiencia existente",
+            });
+          }
         }
       );
   if (isThereAnyConnection(client)) {
@@ -34,6 +44,7 @@ function createExperience(req, res) {
   }
 
 }
+
 
 module.exports = {
   createExperience

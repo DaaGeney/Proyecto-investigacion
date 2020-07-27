@@ -19,7 +19,7 @@
         hide-details
       ></v-text-field>
       </v-card-title>
-    <v-data-table :headers="headers" :items="desserts" loading="getData"  loading-text="Loading... Please wait" :search="search" sort-by="calories" class="elevation-1">
+    <v-data-table :headers="headers" :items="desserts" :loading="getData"  loading-text="Loading... Please wait" :search="search" sort-by="calories" class="elevation-1">
       <template v-slot:top>
         
         <v-toolbar flat color="white">
@@ -134,7 +134,7 @@ export default {
   data: () => ({
     show: {
       name: "",
-      getData:true,
+      
       info: {
         description: "",
         typeComponent: "",
@@ -175,10 +175,12 @@ export default {
       { text: "Type Component", value: "type" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    desserts: []
+    desserts: [],
+    getData:true,
   }),
   mounted() {
     this.initialize();
+    
   },
   methods: {
     initialize() {
@@ -195,10 +197,12 @@ export default {
               info: aux[i].info
             };
             this.desserts.push(temp);
-            this.getData=false
+            
           }
+           
         })
         .catch(error => {});
+        this.getData=false
     },
 
     editItem(item) {

@@ -5,40 +5,74 @@
       <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{ textSnackbar }}</v-snackbar>
       <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
       <v-row>
-          <v-col cols="12" sm="11">
-            <div>
-              <v-breadcrumbs :items="items">
-                <template v-slot:divider>
-                  <v-icon>mdi-forward</v-icon>
-                </template>
-              </v-breadcrumbs>
-            </div>
-          </v-col>
-          <v-col cols="12" sm="1">
-            <v-tooltip v-model="show" top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on" @click="$router.go(-1)">
-                  <v-icon>mdi-keyboard-backspace</v-icon>
-                </v-btn>
+        <v-col cols="12" sm="11">
+          <div>
+            <v-breadcrumbs :items="items">
+              <template v-slot:divider>
+                <v-icon>mdi-forward</v-icon>
               </template>
-              <span>Back</span>
-            </v-tooltip>
-          </v-col>
-        </v-row>
+            </v-breadcrumbs>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="1">
+          <v-tooltip v-model="show" top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on" @click="$router.go(-1)">
+                <v-icon>mdi-keyboard-backspace</v-icon>
+              </v-btn>
+            </template>
+            <span>Back</span>
+          </v-tooltip>
+        </v-col>
+      </v-row>
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1" editable>Facilitation</v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1">Configuration</v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 2" step="2" editable>Core</v-stepper-step>
+        <v-stepper-step :complete="e1 > 2" step="2">Facilitation</v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="3" editable>Evaluation</v-stepper-step>
+        <v-stepper-step :complete="e1 > 3" step="3">Core</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step step="4">Evaluation</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
         <v-stepper-content step="1">
+          <v-card class="mb-12" flat>
+            <v-subheader class="title">Information</v-subheader>
+            <v-col>
+              <v-text-field :rules="rules" counter label="Name" v-model="name" required></v-text-field>
+              <v-textarea
+                :rules="rules"
+                v-model="description"
+                counter
+                label="Description"
+                rows="1"
+                required
+              ></v-textarea>
+              <v-autocomplete
+                v-model="subjectMatter"
+                :items="listSubject"
+                :rules="rules"
+                dense
+                label="Subject Matter"
+                required
+              
+                
+              ></v-autocomplete>
+            </v-col>
+          </v-card>
+
+          <v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+
+          <v-btn text to="/gamificationExperience">Cancel</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="2">
           <v-card class="mb-12" flat>
             <v-subheader class="title">Mandatory items</v-subheader>
             <v-row>
@@ -50,6 +84,10 @@
                   v-model="data.facilitation.gamification"
                   required
                   :rules="rules"
+                  multiple
+                  chips
+                  small-chips
+                  
                   counter
                 ></v-autocomplete>
               </v-col>
@@ -63,12 +101,12 @@
             </v-row>
           </v-card>
 
-          <v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+          <v-btn color="primary" @click="e1 = 3">Continue</v-btn>
 
-          <v-btn text to="/gamificationExperience">Cancel</v-btn>
+          <v-btn text @click="e1 = 1">Back</v-btn>
         </v-stepper-content>
 
-        <v-stepper-content step="2">
+        <v-stepper-content step="3">
           <v-card class="mb-12" flat>
             <v-subheader class="title">Mandatory items</v-subheader>
             <v-row>
@@ -81,6 +119,9 @@
                   required
                   :rules="rules"
                   counter
+                  multiple
+                  chips
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -101,6 +142,9 @@
                   required
                   :rules="rules"
                   counter
+                  multiple
+                  chips
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -119,6 +163,9 @@
                   dense
                   label="Web 2.0 Component"
                   v-model="data.core.web20"
+                  multiple
+                  chips
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -136,6 +183,9 @@
                   dense
                   label="Traditional Component"
                   v-model="data.core.traditional"
+                  multiple
+                  chips
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -147,12 +197,11 @@
               </v-col>
             </v-row>
           </v-card>
-            <v-btn color="primary" @click="e1 = 3">Continue</v-btn>
-          <v-btn text @click="e1 = 1">Back</v-btn>
-        
+          <v-btn color="primary" @click="e1 = 4">Continue</v-btn>
+          <v-btn text @click="e1 = 2">Back</v-btn>
         </v-stepper-content>
 
-        <v-stepper-content step="3">
+        <v-stepper-content step="4">
           <v-card class="mb-12" flat>
             <v-subheader class="title">Mandatory items</v-subheader>
             <v-row>
@@ -164,6 +213,9 @@
                   v-model="data.evaluation.gamification"
                   required
                   :rules="rules"
+                  multiple
+                  chips
+                  small-chips
                   counter
                 ></v-autocomplete>
               </v-col>
@@ -184,6 +236,9 @@
                   dense
                   label="Technological Component"
                   v-model="data.evaluation.technological"
+                  multiple
+                  chips
+                  small-chips
                   counter
                 ></v-autocomplete>
               </v-col>
@@ -202,6 +257,9 @@
                   dense
                   label="Web 2.0 Component"
                   v-model="data.evaluation.web20"
+                  multiple
+                  chips
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -219,6 +277,9 @@
                   dense
                   label="Traditional Component"
                   v-model="data.evaluation.traditional"
+                  multiple
+                  chips
+                  small-chips 
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -231,9 +292,9 @@
             </v-row>
           </v-card>
 
-          <v-btn color="primary" type="submit">Continue</v-btn>
+          <v-btn color="primary" type="submit">Create</v-btn>
 
-          <v-btn text @click="e1 = 2">Back</v-btn>
+          <v-btn text @click="e1 = 3">Back</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -243,35 +304,41 @@
 <script>
 import { createExperience } from "../../helpers/apiCalls/experience";
 import { getComponents } from "../../helpers/apiCalls/component";
+import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
 export default {
   data() {
     return {
+      subjectMatter: "",
+      listSubject: [],
       listGamification: [],
       listTraditional: [],
       listWeb: [],
       listTechnological: [],
       snackbarSuccess: false,
-      rules: [v => !!v || "it's necessary"],
+      rules: [(v) => !!v || "it's necessary"],
       snackbar: false,
       textSnackbar: "",
       loading: false,
       e1: 1,
+      name: "",
+      description: "",
+      show: false,
       data: {
         facilitation: {
-          gamification: ""
+          gamification: "",
         },
         core: {
           gamification: "",
           technological: "",
           web20: "",
-          traditional: ""
+          traditional: "",
         },
         evaluation: {
           gamification: "",
           technological: "",
           web20: "",
-          traditional: ""
-        }
+          traditional: "",
+        },
       },
       topico: "",
       list: ["1", "2"],
@@ -279,19 +346,19 @@ export default {
         {
           text: "Index ",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: `Gamification Experience`,
           disabled: false,
-          href: "/gamificationExperience"
+          href: "/gamificationExperience",
         },
         {
           text: `Define Experience`,
           disabled: true,
-          to: "/"
-        }
-      ]
+          to: "/",
+        },
+      ],
     };
   },
   mounted() {
@@ -301,12 +368,26 @@ export default {
     createNewExperience() {
       this.loading = true;
       if (this.$refs.form.validate()) {
-        createExperience({ data: this.data }).then(response => {
-          this.$refs.form.reset();
-          this.textSnackbar = "Created successfully";
-          this.snackbarSuccess = true;
-          this.loading = false;
-        });
+        let info = {
+          name: this.name,
+          description: this.description,
+          subjectMatter: this.subjectMatter,
+          data: this.data,
+        };
+        createExperience(info)
+          .then((response) => {
+            this.$refs.form.reset();
+            this.textSnackbar = "Created successfully";
+            this.snackbarSuccess = true;
+            this.loading = false;
+            this.e1 = "1";
+          })
+          .catch((error) => {
+            this.e1 = "1";
+            this.textSnackbar = "This experience already exists";
+            this.snackbar = true;
+            this.loading = false;
+          });
       } else {
         this.textSnackbar = "check mandatory fields";
         this.snackbar = true;
@@ -315,21 +396,24 @@ export default {
     },
     getAllComponents() {
       getComponents()
-        .then(response => {
+        .then((response) => {
           let aux = response.data.data;
-          let temp = aux.filter(e => e.info.typeComponent == "Gamification");
-          this.listGamification = temp.map(e => e.name);
-          temp = aux.filter(e => e.info.typeComponent == "Traditional");
-          this.listTraditional = temp.map(e => e.name);
-          temp = aux.filter(e => e.info.typeComponent == "Web2.0");
-          this.listWeb = temp.map(e => e.name);
-          temp = aux.filter(e => e.info.typeComponent == "Technological");
-          this.listTechnological = temp.map(e => e.name);
+          let temp = aux.filter((e) => e.info.typeComponent == "Gamification");
+          this.listGamification = temp.map((e) => e.name);
+          temp = aux.filter((e) => e.info.typeComponent == "Traditional");
+          this.listTraditional = temp.map((e) => e.name);
+          temp = aux.filter((e) => e.info.typeComponent == "Web2.0");
+          this.listWeb = temp.map((e) => e.name);
+          temp = aux.filter((e) => e.info.typeComponent == "Technological");
+          this.listTechnological = temp.map((e) => e.name);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+      getSubjects().then((response) => {
+        this.listSubject = response.data.data.map((e) => e.topic);
+      });
+    },
+  },
 };
 </script>

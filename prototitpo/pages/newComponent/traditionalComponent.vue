@@ -63,6 +63,7 @@ import { createFile} from "../../helpers/apiCalls/file"
 export default {
   data() {
     return {
+      show:false,
       loading: false,
       snackbarSuccess: false,
       snackbar: false,
@@ -153,13 +154,16 @@ export default {
     
       this.$router.go(-1)
     },
-    sendNewFile(){
-      let formData = new FormData()
-      // formData.append("file",this.files[0])
-      this.files.forEach(element => {
-        formData.append(element.name,element)
-      });
-      createFile(formData,this.typeComponent,this.name)
+     sendNewFile() {
+      if (this.files.length > 0) {
+        let formData = new FormData();
+        // formData.append("file",this.files[0])
+        this.files.forEach(element => {
+          formData.append(element.name, element);
+        });
+        console.log(this.typeComponent, this.name);
+        createFile(formData, this.typeComponent, this.name);
+      }
     }
   }
 };
