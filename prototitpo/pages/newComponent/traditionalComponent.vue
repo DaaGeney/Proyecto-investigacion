@@ -61,6 +61,7 @@ import {
 } from "../../helpers/apiCalls/component";
 import { createFile} from "../../helpers/apiCalls/file"
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
       show:false,

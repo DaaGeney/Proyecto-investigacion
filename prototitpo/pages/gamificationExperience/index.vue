@@ -22,6 +22,7 @@
 </template>
 <script>
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
         items: [

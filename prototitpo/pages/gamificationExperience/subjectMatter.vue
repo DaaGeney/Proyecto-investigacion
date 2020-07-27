@@ -49,6 +49,7 @@
 import { createSubject } from "../../helpers/apiCalls/subjectMatter";
 
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
       loading: false,

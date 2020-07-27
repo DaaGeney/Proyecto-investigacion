@@ -52,10 +52,18 @@ export default {
   /*
   ** Nuxt.js modules
   */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
+  
+  
+    modules: [
+       // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-  ],
+      // Simple usage
+      'cookie-universal-nuxt',
+   
+      // With options
+      ['cookie-universal-nuxt', { alias: 'cookiz' }],
+   ],
+  
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

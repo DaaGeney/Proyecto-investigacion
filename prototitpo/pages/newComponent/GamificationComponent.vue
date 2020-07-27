@@ -166,6 +166,7 @@ import {
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
 import { createFile } from "../../helpers/apiCalls/file";
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
       list: [],

@@ -131,6 +131,7 @@ import {
   deleteComponent
 } from "../../helpers/apiCalls/component";
 export default {
+  middleware: "authenticatedAdmin",
   data: () => ({
     show: {
       name: "",

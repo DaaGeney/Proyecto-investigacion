@@ -306,6 +306,7 @@ import { createExperience } from "../../helpers/apiCalls/experience";
 import { getComponents } from "../../helpers/apiCalls/component";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
       subjectMatter: "",

@@ -2,7 +2,7 @@
 
 <script>
 export default {
-//   middleware: "notAuthenticated",
+   middleware: "notAuthenticated",
   layout: "layoutLogin"
 };
 </script>

@@ -52,6 +52,7 @@ import {
   updateComponent
 } from "../../helpers/apiCalls/component";
 export default {
+  middleware: "authenticatedAdmin",
   data() {
     return {
       show:false,

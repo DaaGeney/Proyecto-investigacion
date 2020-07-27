@@ -1,21 +1,8 @@
 <template>
-  <v-app >
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-      
-    >
+  <v-app>
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -23,57 +10,81 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-      </v-list> 
+      </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
+    <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      
+      <v-btn icon @click="logout">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-  
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
+
+    <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
-  data () {
+  data() {
     return {
       clipped: false,
       drawer: true,
       fixed: false,
       items: [
-       
-        {
-          icon: 'mdi-file-document-edit-outline',
-          title: 'Manage components',
-          to: '/newComponent/'
-        },
-         {
-          icon: 'mdi-table-edit',
-          title: 'Gamification Experience',
-          to: '/gamificationExperience/'
-        }
+        
       ],
       miniVariant: false,
       rightDrawer: false,
-      title: 'Methodological Gamification'
+      title: "Methodological Gamification",
+    };
+  },
+  mounted() {
+    let auth = Cookie.get('auth'); // saving token in cookie for server rendering
+    let role = Cookie.get('role'); // saving token in cookie for server rendering
+  
+    if (auth) {
+      if (role == "admin") {
+        this.items = [
+          {
+            icon: "mdi-file-document-edit-outline",
+            title: "Manage users",
+            to: "/manageUser/",
+          }
+        ];
+      } else {
+        this.items = [
+          {
+            icon: "mdi-file-document-edit-outline",
+            title: "Manage components",
+            to: "/newComponent/",
+          },
+          {
+            icon: "mdi-table-edit",
+            title: "Gamification Experience",
+            to: "/gamificationExperience/",
+          },
+        ];
+      }
+    }
+  },
+  methods:{
+    logout(){
+      Cookie.remove("auth");
+      Cookie.remove("id");
+      Cookie.remove("role");
+      this.$router.replace("/login");
     }
   }
-}
+};
 </script>

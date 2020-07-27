@@ -36,7 +36,13 @@
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">New User</v-btn>
+                <v-btn
+                  color="primary"
+                  @click="cleanNew"
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >New User</v-btn>
               </template>
               <v-card>
                 <v-form ref="form" v-on:submit.prevent="save" lazy-validation>
@@ -49,7 +55,7 @@
                   ></v-progress-linear>
 
                   <v-card-title>
-                    <span class="headline">New user</span>
+                    <span class="headline">{{action}} user</span>
                   </v-card-title>
 
                   <v-card-text>
@@ -61,7 +67,7 @@
                         <v-col cols="12">
                           <v-text-field v-model="user.email" :rules="emailRules" label="Email"></v-text-field>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols="12" v-if="action=='Create'">
                           <v-text-field
                             v-model="user.password"
                             type="password"
@@ -98,8 +104,14 @@
 
 <script>
 import { getComponents, deleteComponent } from "../helpers/apiCalls/component";
-import { getUsers, deleteUser, createUser } from "../helpers/apiCalls/auth";
+import {
+  getUsers,
+  deleteUser,
+  createUser,
+  updateUser,
+} from "../helpers/apiCalls/auth";
 export default {
+  middleware: "authenticatedTeacher",
   data: () => ({
     emailRules: [
       (v) => !!v || "it's necessary",
@@ -111,6 +123,7 @@ export default {
     ],
     nameRules: [(v) => !!v || "it's necessary"],
     waiting: false,
+    action: "create",
     snackbarSuccess: false,
     snackbar: false,
     textSnackbar: "",
@@ -137,6 +150,8 @@ export default {
         subjectMatter: "",
       },
     },
+    pastEmail: "",
+    indexEdit: null,
     getData: true,
     search: "",
     dialog: false,
@@ -147,9 +162,9 @@ export default {
         to: "/",
       },
       {
-        text: "Manage Components",
+        text: "Manage users",
         disabled: true,
-        to: "/NewComponent",
+        to: "/manageUser",
       },
     ],
     headers: [
@@ -189,25 +204,46 @@ export default {
       this.getData = false;
     },
 
-    editItem(item) {},
+    editItem(item) {
+      this.pastEmail = item.email;
+      this.action = "Edit";
+      this.dialog = true;
+      this.user = {
+        name: item.name,
+        email: item.email,
+        role: item.role,
+      };
+      this.indexEdit = this.desserts.indexOf(item);
+    },
 
     save() {
       if (this.$refs.form.validate()) {
         this.waiting = true;
-        createUser(this.user)
-          .then((response) => {
-            this.$refs.form.reset();
-            this.textSnackbar = "Created successfully";
+        if (this.action == "Create") {
+          createUser(this.user)
+            .then((response) => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Created successfully";
+              this.snackbarSuccess = true;
+              this.waiting = false;
+              this.initialize();
+              this.dialog = false;
+            })
+            .catch((error) => {
+              this.textSnackbar = "This email already exists";
+              this.snackbar = true;
+              this.waiting = false;
+            });
+        } else {
+          delete this.user.password;
+          updateUser(this.pastEmail, this.user).then((response) => {
+            Object.assign(this.desserts[this.indexEdit], this.user);
+            this.textSnackbar = "updated successfully";
             this.snackbarSuccess = true;
             this.waiting = false;
-            this.initialize();
-            this.dialog = false;
-          })
-          .catch((error) => {
-            this.textSnackbar = "This email already exists";
-            this.snackbar = true;
-            this.waiting = false;
+             this.dialog = false;
           });
+        }
       }
     },
 
@@ -224,6 +260,11 @@ export default {
       deleteUser(item.id).then((response) => {
         console.log("usuario eliminado");
       });
+    },
+
+    cleanNew() {
+      this.action = "Create";
+      this.$refs.form ? this.$refs.form.reset() : undefined;
     },
   },
 };

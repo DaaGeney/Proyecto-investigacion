@@ -71,6 +71,7 @@
 
 <script>
 import { logIn } from "../helpers/apiCalls/auth";
+const Cookie = process.client ? require("js-cookie") : undefined;
 export default {
   data() {
     return {
@@ -106,7 +107,13 @@ export default {
         logIn(info)
           .then((response) => {
             this.loading = false;
-            console.log("login");
+            const auth = response.data.token;
+            const id = response.data.data._id;
+            const role = response.data.data.role;
+            Cookie.set("auth", auth); // saving token in cookie for server rendering
+            Cookie.set("id", id); // saving token in cookie for server rendering
+            Cookie.set("role", role); // saving token in cookie for server rendering
+            role == "admin" ? this.$router.push("/manageUser"): this.$router.push("/newComponent")
           })
           .catch((error) => {
             this.textSnackbar = "invalid credentials";
