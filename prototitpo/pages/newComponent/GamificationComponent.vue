@@ -194,7 +194,7 @@ export default {
       instructorsInstructions: "",
       files: [],
       typeComponent: "Gamification",
-      rules: [v => !!v || "it's necessary"],
+      rules: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
       items: [
         {
           text: "Index ",

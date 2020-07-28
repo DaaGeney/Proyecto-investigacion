@@ -197,7 +197,7 @@
               </v-col>
             </v-row>
           </v-card>
-          <v-btn color="primary" @click="e1 = 4">Continue</v-btn>
+          <v-btn color="primary" @click="verifyEvaluation">Continue</v-btn>
           <v-btn text @click="e1 = 2">Back</v-btn>
         </v-stepper-content>
 
@@ -227,8 +227,6 @@
                 >Create new...</v-btn>
               </v-col>
             </v-row>
-            <v-subheader class="title">Optional items</v-subheader>
-
             <v-row>
               <v-col cols="12" sm="10">
                 <v-autocomplete
@@ -240,6 +238,8 @@
                   chips
                   small-chips
                   counter
+                  required
+                  :rules="rules"
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -250,7 +250,53 @@
                 >Create new...</v-btn>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="webNecessary">
+              <v-col cols="12" sm="10">
+                <v-autocomplete
+                  :items="listWeb"
+                  dense
+                  label="Web 2.0 Component"
+                  v-model="data.evaluation.web20"
+                  multiple
+                  chips
+                  small-chips
+                  required
+                  :rules="rules"
+                ></v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="2">
+                <v-btn
+                  text
+                  color="primary"
+                  to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create"
+                >Create new...</v-btn>
+              </v-col>
+            </v-row>
+            <v-row v-if="traditionalNecessary">
+              <v-col cols="12" sm="10">
+                <v-autocomplete
+                  :items="listTraditional"
+                  dense
+                  label="Traditional Component"
+                  v-model="data.evaluation.traditional"
+                  multiple
+                  chips
+                  small-chips 
+                  required
+                  :rules="rules"
+                ></v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="2">
+                <v-btn
+                  text
+                  color="primary"
+                  to="/newComponent/traditionalComponent?action=Create"
+                >Create new...</v-btn>
+              </v-col>
+            </v-row>
+            <v-subheader class="title" v-if="!webNecessary || !traditionalNecessary">Optional items</v-subheader>
+
+            <v-row v-if="!webNecessary">
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listWeb"
@@ -270,7 +316,7 @@
                 >Create new...</v-btn>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="!traditionalNecessary">
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listTraditional"
@@ -316,7 +362,7 @@ export default {
       listWeb: [],
       listTechnological: [],
       snackbarSuccess: false,
-      rules: [(v) => !!v || "it's necessary"],
+      rules: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
       snackbar: false,
       textSnackbar: "",
       loading: false,
@@ -343,6 +389,8 @@ export default {
       },
       topico: "",
       list: ["1", "2"],
+      webNecessary:false,
+      traditionalNecessary:false,
       items: [
         {
           text: "Index ",
@@ -415,6 +463,12 @@ export default {
         this.listSubject = response.data.data.map((e) => e.topic);
       });
     },
+    verifyEvaluation(){
+      console.log(this.data);
+      this.e1 = 4
+      this.data.core.web20 !="" ? this.webNecessary=true : this.webNecessary = false
+      this.data.core.traditional !="" ? this.traditionalNecessary=true : this.traditionalNecessary=false
+    }
   },
 };
 </script>
