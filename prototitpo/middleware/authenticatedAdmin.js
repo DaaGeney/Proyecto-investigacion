@@ -8,7 +8,12 @@ export default function ({app,  store, redirect }) {
     if (!cookiesRes ) {
        return redirect('/login')
     }else if(role=="admin"){
+
         return redirect('/manageUser')
+    }else if (role!="teacher") {
+        app.$cookies.removeAll()
+        return redirect('/login')
+
     }
 
   } 

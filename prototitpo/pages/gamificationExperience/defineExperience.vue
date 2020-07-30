@@ -46,9 +46,9 @@
           <v-card class="mb-12" flat>
             <v-subheader class="title">Information</v-subheader>
             <v-col>
-              <v-text-field :rules="rules" counter label="Name" v-model="name" required></v-text-field>
+              <v-text-field :rules="rulesText" counter label="Name" v-model="name" required></v-text-field>
               <v-textarea
-                :rules="rules"
+                :rules="rulesText"
                 v-model="description"
                 counter
                 label="Description"
@@ -362,6 +362,7 @@ export default {
       listWeb: [],
       listTechnological: [],
       snackbarSuccess: false,
+       rulesText: [v => !!v || "it's necessary"],
       rules: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
       snackbar: false,
       textSnackbar: "",

@@ -9,6 +9,10 @@ export default function ({app,  store, redirect }) {
        return redirect('/login')
     }else if(role=="teacher"){
         return redirect('/newComponent')
+    }else if (role!="admin") {
+        app.$cookies.removeAll()
+        return redirect('/login')
+
     }
 
   } 

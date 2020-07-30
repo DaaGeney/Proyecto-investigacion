@@ -66,7 +66,7 @@
                 <v-autocomplete
                   v-model="learningObjetive"
                   :items="list"
-                  :rules="rules"
+                  :rules="rulesLearning"
                   dense
                   chips
                   small-chips
@@ -104,7 +104,7 @@
             ></v-textarea>
 
             <v-file-input
-              :rules="rules"
+              
               v-model="files"
               small-chips
               counter
@@ -194,7 +194,8 @@ export default {
       instructorsInstructions: "",
       files: [],
       typeComponent: "Gamification",
-      rules: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
+      rulesLearning: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
+       rules: [(v) => !!v || "it's necessary"],
       items: [
         {
           text: "Index ",
