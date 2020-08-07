@@ -52,7 +52,6 @@
                         :rules="passwordRules"
                         required
                       ></v-text-field>
-                      <v-switch v-model="switch1" :label="`Admin`"></v-switch>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -81,7 +80,6 @@ export default {
       textSnackbar: "",
       email: "",
       password: "",
-      switch1: false,
       emailRules: [
         (v) => !!v || "Email invalid",
         (v) => /.+@.+\..+/.test(v) || "email invalid",
@@ -100,9 +98,8 @@ export default {
         let info = {
           email: this.email,
           password: this.password,
-          role: "",
+          
         };
-        this.switch1 ? (info.role = "admin") : (info.role = "teacher");
         console.log(info);
         logIn(info)
           .then((response) => {
@@ -113,7 +110,7 @@ export default {
             Cookie.set("auth", auth); // saving token in cookie for server rendering
             Cookie.set("id", id); // saving token in cookie for server rendering
             Cookie.set("role", role); // saving token in cookie for server rendering
-            role == "admin" ? this.$router.push("/manageUser"): this.$router.push("/newComponent")
+             this.$router.push("/gamificationExperience")
           })
           .catch((error) => {
             this.textSnackbar = "invalid credentials";

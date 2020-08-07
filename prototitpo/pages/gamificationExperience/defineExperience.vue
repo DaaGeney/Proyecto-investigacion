@@ -58,12 +58,10 @@
               <v-autocomplete
                 v-model="subjectMatter"
                 :items="listSubject"
-                :rules="rules"
+                :rules="rulesText"
                 dense
                 label="Subject Matter"
                 required
-              
-                
               ></v-autocomplete>
             </v-col>
           </v-card>
@@ -87,7 +85,6 @@
                   multiple
                   chips
                   small-chips
-                  
                   counter
                 ></v-autocomplete>
               </v-col>
@@ -281,7 +278,7 @@
                   v-model="data.evaluation.traditional"
                   multiple
                   chips
-                  small-chips 
+                  small-chips
                   required
                   :rules="rules"
                 ></v-autocomplete>
@@ -325,7 +322,7 @@
                   v-model="data.evaluation.traditional"
                   multiple
                   chips
-                  small-chips 
+                  small-chips
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="2">
@@ -362,8 +359,11 @@ export default {
       listWeb: [],
       listTechnological: [],
       snackbarSuccess: false,
-       rulesText: [v => !!v || "it's necessary"],
-      rules: [(v) => !!v || "it's necessary", v => v.length >=  1 ||"it's necessary"],
+      rulesText: [(v) => !!v || "it's necessary"],
+      rules: [
+        (v) => !!v || "it's necessary",
+        (v) => v.length >= 1 || "it's necessary",
+      ],
       snackbar: false,
       textSnackbar: "",
       loading: false,
@@ -390,8 +390,8 @@ export default {
       },
       topico: "",
       list: ["1", "2"],
-      webNecessary:false,
-      traditionalNecessary:false,
+      webNecessary: false,
+      traditionalNecessary: false,
       items: [
         {
           text: "Index ",
@@ -430,6 +430,27 @@ export default {
             this.textSnackbar = "Created successfully";
             this.snackbarSuccess = true;
             this.loading = false;
+
+            this.data = {
+              facilitation: {
+                gamification: "",
+              },
+              core: {
+                gamification: "",
+                technological: "",
+                web20: "",
+                traditional: "",
+              },
+              evaluation: {
+                gamification: "",
+                technological: "",
+                web20: "",
+                traditional: "",
+              },
+            };
+            this.subjectMatter = "";
+            this.name = "";
+            this.description = "";
             this.e1 = "1";
           })
           .catch((error) => {
@@ -464,12 +485,16 @@ export default {
         this.listSubject = response.data.data.map((e) => e.topic);
       });
     },
-    verifyEvaluation(){
+    verifyEvaluation() {
       console.log(this.data);
-      this.e1 = 4
-      this.data.core.web20 !="" ? this.webNecessary=true : this.webNecessary = false
-      this.data.core.traditional !="" ? this.traditionalNecessary=true : this.traditionalNecessary=false
-    }
+      this.e1 = 4;
+      this.data.core.web20 != ""
+        ? (this.webNecessary = true)
+        : (this.webNecessary = false);
+      this.data.core.traditional != ""
+        ? (this.traditionalNecessary = true)
+        : (this.traditionalNecessary = false);
+    },
   },
 };
 </script>

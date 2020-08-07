@@ -19,3 +19,6 @@ export const getUsers = () =>{
 export const deleteUser = (id) => {
   return axios.delete(`${url}/user/delete/${id}`);
 };
+export const getRole = (id) =>{
+  return axios.get(`${url}/user/getRole/${id}`);
+}

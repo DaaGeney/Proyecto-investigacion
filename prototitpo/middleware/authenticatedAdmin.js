@@ -1,19 +1,21 @@
-  
-export default function ({app,  store, redirect }) {
+import { getRole } from "../helpers/apiCalls/auth";
+
+export default async function ({ app, store, redirect }) {
     // If the user is not authenticated
- 
+
     const cookiesRes = app.$cookies.get('auth')
-    const role = app.$cookies.get('role')
-
-    if (!cookiesRes ) {
-       return redirect('/login')
-    }else if(role=="admin"){
-
-        return redirect('/manageUser')
-    }else if (role!="teacher") {
+    const id = app.$cookies.get('id')
+   
+    await getRole(id).then(response => {
+        let role = response.data.role;
+         if (!cookiesRes) {
+            return redirect('/login')
+        } 
+    }).catch(error=>{
+        console.log("error")
         app.$cookies.removeAll()
         return redirect('/login')
+    })
 
-    }
 
-  } 
+} 

@@ -34,6 +34,7 @@
 
 <script>
 const Cookie = process.client ? require("js-cookie") : undefined;
+import { getRole } from "../helpers/apiCalls/auth";
 
 export default {
   data() {
@@ -41,26 +42,35 @@ export default {
       clipped: false,
       drawer: true,
       fixed: false,
-      items: [
-        
-      ],
+      items: [],
       miniVariant: false,
       rightDrawer: false,
       title: "Methodological Gamification",
     };
   },
   mounted() {
-    let auth = Cookie.get('auth'); // saving token in cookie for server rendering
-    let role = Cookie.get('role'); // saving token in cookie for server rendering
-  
-    if (auth) {
-      if (role == "admin") {
+    let auth = Cookie.get("auth"); // saving token in cookie for server rendering
+    let id = Cookie.get("id"); // saving token in cookie for server rendering
+    getRole(id)
+      .then((response) => {
+        let role = response.data.role;
+        if (role == "admin") {
         this.items = [
           {
             icon: "mdi-file-document-edit-outline",
             title: "Manage users",
             to: "/manageUser/",
-          }
+          },
+          {
+            icon: "mdi-file-document-edit-outline",
+            title: "Manage components",
+            to: "/newComponent/",
+          },
+          {
+            icon: "mdi-table-edit",
+            title: "Gamification Experience",
+            to: "/gamificationExperience/",
+          },
         ];
       } else {
         this.items = [
@@ -76,15 +86,22 @@ export default {
           },
         ];
       }
-    }
+      })
+      .catch((error) => {
+         Cookie.remove("auth");
+      Cookie.remove("id");
+      Cookie.remove("role");
+      this.$router.replace("/login");
+      });
+    
   },
-  methods:{
-    logout(){
+  methods: {
+    logout() {
       Cookie.remove("auth");
       Cookie.remove("id");
       Cookie.remove("role");
       this.$router.replace("/login");
-    }
-  }
+    },
+  },
 };
 </script>

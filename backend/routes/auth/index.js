@@ -9,6 +9,7 @@ router.post("/user/createUser", controller.createUser);
 // router.post("/user/changePassword", validateToken, controller.changePassword);
 router.post("/user/update/:pastEmail",controller.updateUser);
 router.get("/user/getUsers", controller.getUsers);
+router.get("/user/getRole/:id", controller.getRole);
 router.delete("/user/delete/:id", controller.deleteUser);
 
 module.exports = router;

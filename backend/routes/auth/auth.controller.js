@@ -58,10 +58,10 @@ function createUser(req, res) {
 
 
 function logIn(req, res) {
-  const { email, password,role } = req.body;
+  const { email, password } = req.body;
   console.log(req.body);
 
-  if (email && password && role) {
+  if (email && password) {
     let fun = (dataBase) =>
       dataBase.collection(collection).findOne(
         {
@@ -69,7 +69,6 @@ function logIn(req, res) {
             {
               email,
               password: crypto.createHmac("sha256", password).digest("hex"),
-              role
             },
           ],
         },
@@ -91,7 +90,7 @@ function logIn(req, res) {
               status: false,
               data: [],
               message:
-                "El usuario no se encuentra registrado con estas credenciales",
+                "El usuario no se encuentra registrado",
             });
           }
         }
@@ -111,6 +110,48 @@ function logIn(req, res) {
       status: false,
       data: [],
       message: "No se han ingresado todos los campos",
+    });
+  }
+}
+
+function getRole(req, res) {
+  let { id } = req.params;
+  if (id) {
+    let fun = (dataBase) =>
+      dataBase
+        .collection(collection)
+        .findOne({ _id: ObjectId(id) }, (err, item) => {
+          if (err) throw err;
+          if (item) {
+            delete item.password;
+            res.status(200).send({
+              status: true,
+              role: item.role,
+              message: `Usuario encontrado`,
+            });
+          } else {
+            res.status(404).send({
+              status: false,
+              data: [],
+              message: `El usuario con id ${id} no se encuentra registrado`,
+            });
+          }
+        });
+    if (isThereAnyConnection(client)) {
+      const dataBase = client.db(DBName);
+      fun(dataBase);
+    } else {
+      client.connect((err) => {
+        if (err) throw err;
+        const dataBase = client.db(DBName);
+        fun(dataBase);
+      });
+    }
+  } else {
+    res.status(400).send({
+      status: false,
+      data: [],
+      message: "Necesitas el id del usuario",
     });
   }
 }
@@ -228,5 +269,6 @@ module.exports = {
   createUser,
   getUsers,
   deleteUser,
-  updateUser
+  updateUser,
+  getRole
 };

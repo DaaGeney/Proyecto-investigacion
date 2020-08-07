@@ -57,6 +57,7 @@ export default {
       snackbar: false,
       textSnackbar: "",
       subject: "",
+      show:false,
       level: "",
       program: "",
       topic: "",
