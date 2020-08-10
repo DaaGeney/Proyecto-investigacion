@@ -59,6 +59,7 @@ import {
   getComponent,
   updateComponent
 } from "../../helpers/apiCalls/component";
+const Cookie = process.client ? require("js-cookie") : undefined;
 import { createFile} from "../../helpers/apiCalls/file"
 export default {
   middleware: "authenticatedAdmin",
@@ -113,6 +114,7 @@ export default {
         this.loading = true;
         let info = {
           name: this.name,
+          idUser:Cookie.get("id"),
           info: {
             description: this.description,
             url: this.url,

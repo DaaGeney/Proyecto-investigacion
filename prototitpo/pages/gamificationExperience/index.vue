@@ -18,6 +18,9 @@
     <v-row>
       <v-btn text color="primary" to="/gamificationExperience/defineExperience">Define Experience...</v-btn>
     </v-row>
+<v-row>
+      <v-btn text color="primary" to="/gamificationExperience/manageExperiences">Check experiences...</v-btn>
+    </v-row>
   </v-card>
 </template>
 <script>

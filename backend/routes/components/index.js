@@ -16,7 +16,7 @@ router.post(
   controller.createComponent
 );
 router.get(
-  "/getComponents",
+  "/getComponents/:id",
   controller.getComponents
 );
 router.get(

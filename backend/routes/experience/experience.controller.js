@@ -44,8 +44,42 @@ function createExperience(req, res) {
   }
 
 }
+function getExperiences(req, res) {
+  let fun = (DB) =>
+    DB
+      .collection(collection)
+      .find()
+      .toArray((err, items) => {
+        if (err) throw err;
+        if (items.length > 0) {
+          res.status(200).send({
+            status: true,
+            data: items,
+            message: "All experiences",
+          });
+        } else {
+          res.status(400).send({
+            status: false,
+            data: [],
+            message: "without results",
+          });
+        }
+      });
+  if (isThereAnyConnection(client)) {
+
+    const DB = client.db(DBName);
+    fun(DB);
+  } else {
+    client.connect((err) => {
+      if (err) throw err;
+      const DB = client.db(DBName);
+      fun(DB);
+    });
+  }
+}
 
 
 module.exports = {
-  createExperience
+  createExperience,
+  getExperiences
 }

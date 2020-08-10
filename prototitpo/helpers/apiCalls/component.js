@@ -4,8 +4,8 @@ import { url } from "../../config";
 export const createComponent = (body) => {
   return axios.post(`${url}/newComponent`, body);
 };
-export const getComponents = () => {
-  return axios.get(`${url}/getComponents`);
+export const getComponents = (id) => {
+  return axios.get(`${url}/getComponents/${id}`);
 };
 export const updateComponent = (pastName, body) => {
   return axios.post(`${url}/updateComponent/${pastName}`,body);

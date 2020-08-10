@@ -3,6 +3,7 @@ const { DBName, client } = require("../../config/mongo.config");
 const ObjectId = require("mongodb").ObjectID;
 const { isThereAnyConnection } = require("../../utils/helpers");
 const { createToken } = require("../../utils/auth");
+const {mailDetails} = require("../../utils/sendEmail")
 
 const collection = "users";
 
@@ -14,7 +15,7 @@ function createUser(req, res) {
       name,
       role,
       password: crypto.createHmac("sha256", password).digest("hex")
-      
+
     };
     let fun = (dataBase) =>
       dataBase
@@ -77,12 +78,12 @@ function logIn(req, res) {
           if (user) {
             const token = createToken({ ...user });
             delete user.password;
-          
+
             delete user.name;
             res.status(200).send({
               status: true,
               data: user,
-              message: "Usuario encontrado", 
+              message: "Usuario encontrado",
               token: token,
             });
           } else {
@@ -116,7 +117,7 @@ function logIn(req, res) {
 
 function getRole(req, res) {
   let { id } = req.params;
-  if (id) {
+  if (id.length >= 24) {
     let fun = (dataBase) =>
       dataBase
         .collection(collection)
@@ -163,7 +164,7 @@ function getUsers(req, res) {
       .find()
       .toArray((err, items) => {
         if (err) throw err;
-        items.map(e=> delete e.password)
+        items.map(e => delete e.password)
         if (items.length > 0) {
           res.status(200).send({
             status: true,
@@ -189,46 +190,48 @@ function getUsers(req, res) {
       fun(DB);
     });
   }
-} 
+}
 
 function deleteUser(req, res) {
   const { id } = req.params
-  let fun = (DB) =>
-    DB.collection(collection).deleteOne(
-      { _id: { $eq: ObjectId(id) } },
-      (err, item) => {
-        if (err) throw err;
-
-        if (item.result.n > 0) {
-          res.status(200).send({
-            status: true,
-            message: "Eliminación correcta",
-          });
-        } else {
-          res.status(404).send({
-            status: false,
-            message: "Indice no existe",
-          });
-        }
-      });
-  if (isThereAnyConnection(client)) {
-    const DB = client.db(DBName);
-    fun(DB);
-  } else {
-    client.connect((err) => {
-      if (err) throw err;
+  if (id.length >= 24) {
+    let fun = (DB) =>
+      DB.collection(collection).deleteOne(
+        { _id: { $eq: ObjectId(id) } },
+        (err, item) => {
+          if (err) throw err;
+          if (item.result.n > 0) {
+            res.status(200).send({
+              status: true,
+              message: "Eliminación correcta",
+            });
+          } else {
+            res.status(404).send({
+              status: false,
+              message: "Indice no existe",
+            });
+          }
+        });
+    if (isThereAnyConnection(client)) {
       const DB = client.db(DBName);
       fun(DB);
-    });
+    } else {
+      client.connect((err) => {
+        if (err) throw err;
+        const DB = client.db(DBName);
+        fun(DB);
+      });
+    }
   }
+
 }
 function updateUser(req, res) {
   const { pastEmail } = req.params
-  const { name, email,role } = req.body;
+  const { name, email, role } = req.body;
 
   let fun = (dataBase) =>
     dataBase.collection(collection).updateOne(
-      { email: { $eq: pastEmail }  },
+      { email: { $eq: pastEmail } },
       {
         $set: {
           name: name,
@@ -261,7 +264,93 @@ function updateUser(req, res) {
       fun(dataBase);
     });
   }
+}
 
+function restorePassword(req, res) {
+  let { email } = req.body;
+  if (email) {
+    let fun = (dataBase) =>
+      dataBase.collection(collection).findOne({ email }, (err, item) => {
+        if (err) throw err;
+        if (item) {
+          let token = createToken({ ...item });
+          mailDetails(email, token);
+          res.status(200).send({
+            status: true,
+            data: { email, token },
+            message: "El link fue enviado al correo ingresado.",
+          });
+        } else {
+          res.status(404).send({
+            status: false,
+            data: [],
+            message: `El usuario con correo ${email} no se encontró`,
+          });
+        }
+      });
+    if (isThereAnyConnection(client)) {
+      const dataBase = client.db(DBName);
+      fun(dataBase);
+    } else {
+      client.connect((err) => {
+        if (err) throw err;
+        const dataBase = client.db(DBName);
+        fun(dataBase);
+      });
+    }
+  } else {
+    res.status(400).send({
+      status: false,
+      data: [],
+      message: "Necesitas el id del usuario",
+    });
+  }
+}
+
+function changePassword(req, res) {
+  let { email, newPassword } = req.body;
+  if (email && newPassword) {
+    let fun = (dataBase) =>
+      dataBase.collection(collection).updateOne(
+        { email },
+        {
+          $set: {
+            password: crypto.createHmac("sha256", newPassword).digest("hex"),
+          },
+        },
+        (err, item) => {
+          if (err) throw err;
+
+          if (item.result.n > 0) {
+            res.status(200).send({
+              status: true,
+              message: "Cambiado con éxito",
+            });
+          } else {
+            res.status(404).send({
+              status: false,
+              message: "El usuario no se encuentra registrado",
+            });
+          }
+        }
+      );
+    if (isThereAnyConnection(client)) {
+      const dataBase = client.db(DBName);
+      fun(dataBase);
+    } else {
+      client.connect((err) => {
+        if (err) throw err;
+        const dataBase = client.db(DBName);
+        fun(dataBase);
+      });
+    }
+  } else {
+    res.status(400).send({
+      status: false,
+      data: [],
+      message: "Necesitas el id del usuario",
+    });
+  }
 }
 
 module.exports = {
@@ -270,5 +359,7 @@ module.exports = {
   getUsers,
   deleteUser,
   updateUser,
-  getRole
+  getRole,
+  restorePassword,
+  changePassword
 };

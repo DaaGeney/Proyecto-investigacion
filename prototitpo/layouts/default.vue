@@ -16,6 +16,19 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-row align="center" style="max-width: 650px">
+        <v-text-field
+          placeholder="Search experience..."
+          single-line
+          v-model="searchInput"
+          hide-details
+        ></v-text-field>
+        <v-btn icon @click="search">
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </v-row>
+      <v-spacer />
+
       <v-btn icon @click="logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
@@ -46,6 +59,7 @@ export default {
       miniVariant: false,
       rightDrawer: false,
       title: "Methodological Gamification",
+      searchInput: null,
     };
   },
   mounted() {
@@ -55,45 +69,44 @@ export default {
       .then((response) => {
         let role = response.data.role;
         if (role == "admin") {
-        this.items = [
-          {
-            icon: "mdi-file-document-edit-outline",
-            title: "Manage users",
-            to: "/manageUser/",
-          },
-          {
-            icon: "mdi-file-document-edit-outline",
-            title: "Manage components",
-            to: "/newComponent/",
-          },
-          {
-            icon: "mdi-table-edit",
-            title: "Gamification Experience",
-            to: "/gamificationExperience/",
-          },
-        ];
-      } else {
-        this.items = [
-          {
-            icon: "mdi-file-document-edit-outline",
-            title: "Manage components",
-            to: "/newComponent/",
-          },
-          {
-            icon: "mdi-table-edit",
-            title: "Gamification Experience",
-            to: "/gamificationExperience/",
-          },
-        ];
-      }
+          this.items = [
+            {
+              icon: "mdi-file-document-edit-outline",
+              title: "Manage users",
+              to: "/manageUser/",
+            },
+            {
+              icon: "mdi-file-document-edit-outline",
+              title: "Manage components",
+              to: "/newComponent/",
+            },
+            {
+              icon: "mdi-table-edit",
+              title: "Gamification Experience",
+              to: "/gamificationExperience/",
+            },
+          ];
+        } else {
+          this.items = [
+            {
+              icon: "mdi-file-document-edit-outline",
+              title: "Manage components",
+              to: "/newComponent/",
+            },
+            {
+              icon: "mdi-table-edit",
+              title: "Gamification Experience",
+              to: "/gamificationExperience/",
+            },
+          ];
+        }
       })
       .catch((error) => {
-         Cookie.remove("auth");
-      Cookie.remove("id");
-      Cookie.remove("role");
-      this.$router.replace("/login");
+        Cookie.remove("auth");
+        Cookie.remove("id");
+        Cookie.remove("role");
+        this.$router.replace("/login");
       });
-    
   },
   methods: {
     logout() {
@@ -101,6 +114,15 @@ export default {
       Cookie.remove("id");
       Cookie.remove("role");
       this.$router.replace("/login");
+    },
+    search() {
+      if (this.searchInput) {
+        let aux= this.searchInput
+        this.searchInput = null
+        this.$router.push(`/gamificationExperience/manageExperiences?search=${aux}`);
+      } else {
+        this.$router.push(`/gamificationExperience/manageExperiences`);
+      }
     },
   },
 };

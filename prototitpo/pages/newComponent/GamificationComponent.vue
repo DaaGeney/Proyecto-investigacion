@@ -165,6 +165,8 @@ import {
 } from "../../helpers/apiCalls/learningObjetives";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
 import { createFile } from "../../helpers/apiCalls/file";
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
   middleware: "authenticatedAdmin",
   data() {
@@ -250,6 +252,7 @@ export default {
         this.loading = true;
         let info = {
           name: this.name,
+          idUser:Cookie.get("id"),
           info: {
             description: this.description,
             url: this.url,
@@ -270,7 +273,6 @@ export default {
           updateComponent(this.$route.query.name, info)
             .then(response => {
               this.sendNewFile();
-            
               this.textSnackbar = "Updated successfully";
               this.snackbarSuccess = true;
               this.loading = false;

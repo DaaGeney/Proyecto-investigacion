@@ -130,6 +130,8 @@ import {
   getComponents,
   deleteComponent
 } from "../../helpers/apiCalls/component";
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
@@ -185,7 +187,7 @@ export default {
   },
   methods: {
     initialize() {
-      getComponents()
+      getComponents(Cookie.get("id"))
         .then(response => {
           let temp = {},
             aux = response.data.data;

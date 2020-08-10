@@ -12,6 +12,11 @@ router.post(
   "/newExperience",
   controller.createExperience
 );
+router.get(
+  "/getExperiences",
+  controller.getExperiences
+);
+
 
 
 module.exports = router;

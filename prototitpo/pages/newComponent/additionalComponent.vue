@@ -38,7 +38,7 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset" >Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
           <v-btn color="blue darken-1" type="submit">Save</v-btn>
         </v-card-actions>
       </v-container>
@@ -49,13 +49,15 @@
 import {
   createComponent,
   getComponent,
-  updateComponent
+  updateComponent,
 } from "../../helpers/apiCalls/component";
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
-      show:false,
+      show: false,
       loading: false,
       snackbarSuccess: false,
       snackbar: false,
@@ -64,32 +66,32 @@ export default {
       description: "",
       url: "",
       files: [],
-      rules: [v => !!v || "it's necessary"],
+      rules: [(v) => !!v || "it's necessary"],
       action: "",
       items: [
         {
           text: "Index ",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: "Manage Components",
           disabled: false,
-          to: "/NewComponent"
+          to: "/NewComponent",
         },
         {
           text: `${this.$route.query.action} ${this.$route.query.typeComponent} Component`,
           disabled: true,
-          to: "/NewComponent/additionalComponent"
-        }
-      ]
+          to: "/NewComponent/additionalComponent",
+        },
+      ],
     };
   },
   mounted() {
     this.action = this.$route.query.action;
     if (this.action == "Update") {
       console.log("datos traido", this.$route.query.name);
-      getComponent(this.$route.query.name).then(response => {
+      getComponent(this.$route.query.name).then((response) => {
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
         this.url = response.data.data.info.url;
@@ -98,19 +100,20 @@ export default {
     }
   },
   methods: {
-    createGamification: function() {
+    createGamification: function () {
       if (this.$refs.form.validate()) {
         this.loading = true;
         let info = {
           name: this.name,
+          idUser: Cookie.get("id"),
           info: {
             description: this.description,
             url: this.url,
-            typeComponent: this.$route.query.typeComponent
-          }
+            typeComponent: this.$route.query.typeComponent,
+          },
         };
         if (this.action == "Update") {
-          updateComponent(this.$route.query.name, info).then(then => {
+          updateComponent(this.$route.query.name, info).then((then) => {
             this.$refs.form.reset();
             this.textSnackbar = "Updated successfully";
             this.snackbarSuccess = true;
@@ -118,13 +121,13 @@ export default {
           });
         } else {
           createComponent(info)
-            .then(response => {
+            .then((response) => {
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";
               this.snackbarSuccess = true;
               this.loading = false;
             })
-            .catch(error => {
+            .catch((error) => {
               console.log(error.status);
               this.textSnackbar = "This component already exists";
               this.snackbar = true;
@@ -133,10 +136,10 @@ export default {
         }
       }
     },
-    reset: function() {
+    reset: function () {
       this.$refs.form.reset();
-      this.$router.go(-1)
-    }
-  }
+      this.$router.go(-1);
+    },
+  },
 };
 </script>

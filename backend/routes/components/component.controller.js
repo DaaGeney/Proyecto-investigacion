@@ -5,21 +5,20 @@ var ObjectId = require('mongodb').ObjectID;
 const collection = "components"
 
 function createComponent(req, res) {
-  const name = req.body.name
-  const info = req.body.info
-  console.log(info)
+  const {name,info,idUser} = req.body
+  
   let fun = (DB) =>
     DB
       .collection(collection)
       .update({ name },
-        { $setOnInsert: { info } },
+        { $setOnInsert: { idUser, info } },
         { upsert: true },
         (err, item) => {
           if (err) throw err;
           if (item.result.upserted) {
             res.status(201).send({
               status: true,
-              data: { info },
+              data: { idUser,info },
               message: "Metodología creada correctamente",
             });
           } else {
@@ -45,10 +44,11 @@ function createComponent(req, res) {
 }
 
 function getComponents(req, res) {
+  const { id } = req.params
   let fun = (DB) =>
     DB
       .collection(collection)
-      .find()
+      .find({ idUser: { $eq: id } })
       .toArray((err, items) => {
         if (err) throw err;
         if (items.length > 0) {
