@@ -1,18 +1,18 @@
 import axios from "axios";
 import { url } from "../../config";
 
-export const createComponent = (body) => {
-  return axios.post(`${url}/newComponent`, body);
+export const createComponent = (body,config) => {
+  return axios.post(`${url}/newComponent`, body,config);
 };
-export const getComponents = (id) => {
-  return axios.get(`${url}/getComponents/${id}`);
+export const getComponents = (id,config) => {
+  return axios.get(`${url}/getComponents/${id}`,config);
 };
-export const updateComponent = (pastName, body) => {
-  return axios.post(`${url}/updateComponent/${pastName}`,body);
+export const updateComponent = (pastName, body,config) => {
+  return axios.post(`${url}/updateComponent/${pastName}`,body,config);
 };
-export const getComponent = (name) => {
-  return axios.get(`${url}/getComponent/${name}`);
+export const getComponent = (name,config) => {
+  return axios.get(`${url}/getComponent/${name}`,config);
 };
-export const deleteComponent = (id) => {
-  return axios.delete(`${url}/deleteComponent/${id}`);
+export const deleteComponent = (id,config) => {
+  return axios.delete(`${url}/deleteComponent/${id}`,config);
 };

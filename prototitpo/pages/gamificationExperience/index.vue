@@ -24,6 +24,8 @@
   </v-card>
 </template>
 <script>
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
   middleware: "authenticatedAdmin",
   data() {

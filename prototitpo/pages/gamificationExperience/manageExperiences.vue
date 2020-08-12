@@ -42,12 +42,15 @@
 </template>
 
 <script>
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 import {
   getExperiences
 } from "../../helpers/apiCalls/experience";
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
+    config:"",
     show: {
       name: "",
       
@@ -95,13 +98,16 @@ export default {
     getData:true,
   }),
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.initialize();
     this.$route.query.search ? this.search = this.$route.query.search : undefined
     
   },
   methods: {
     initialize() {
-      getExperiences()
+      getExperiences(this.config)
         .then(response => {
             console.log(response);
           let temp = {},

@@ -103,6 +103,8 @@
 </template>
 
 <script>
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 import { getComponents, deleteComponent } from "../helpers/apiCalls/component";
 import {
   getUsers,
@@ -113,6 +115,7 @@ import {
 export default {
   middleware: "authenticatedTeacher",
   data: () => ({
+    config:"",
     emailRules: [
       (v) => !!v || "it's necessary",
       (v) => /.+@.+\..+/.test(v) || "Email invalid",
@@ -155,6 +158,7 @@ export default {
     getData: true,
     search: "",
     dialog: false,
+    config:"",
     items: [
       {
         text: "Index ",
@@ -181,12 +185,16 @@ export default {
     desserts: [],
   }),
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.initialize();
+    
   },
   methods: {
     initialize() {
       this.desserts = [];
-      getUsers()
+      getUsers(this.config)
         .then((response) => {
           let temp = {},
             aux = response.data.data;
@@ -236,7 +244,7 @@ export default {
             });
         } else {
           delete this.user.password;
-          updateUser(this.pastEmail, this.user).then((response) => {
+          updateUser(this.pastEmail, this.user,this.config).then((response) => {
             Object.assign(this.desserts[this.indexEdit], this.user);
             this.textSnackbar = "updated successfully";
             this.snackbarSuccess = true;
@@ -257,7 +265,7 @@ export default {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this user?") &&
         this.desserts.splice(index, 1);
-      deleteUser(item.id).then((response) => {
+      deleteUser(item.id,this.config).then((response) => {
         console.log("usuario eliminado");
       });
     },

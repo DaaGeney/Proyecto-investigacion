@@ -57,6 +57,7 @@ export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
+      config:"",
       show: false,
       loading: false,
       snackbarSuccess: false,
@@ -88,10 +89,13 @@ export default {
     };
   },
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.action = this.$route.query.action;
     if (this.action == "Update") {
       console.log("datos traido", this.$route.query.name);
-      getComponent(this.$route.query.name).then((response) => {
+      getComponent(this.$route.query.name,this.config).then((response) => {
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
         this.url = response.data.data.info.url;
@@ -113,14 +117,14 @@ export default {
           },
         };
         if (this.action == "Update") {
-          updateComponent(this.$route.query.name, info).then((then) => {
+          updateComponent(this.$route.query.name, info,this.config).then((then) => {
             this.$refs.form.reset();
             this.textSnackbar = "Updated successfully";
             this.snackbarSuccess = true;
             this.loading = false;
           });
         } else {
-          createComponent(info)
+          createComponent(info,this.config)
             .then((response) => {
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";
@@ -128,7 +132,8 @@ export default {
               this.loading = false;
             })
             .catch((error) => {
-              console.log(error.status);
+              console.log(info,"info");
+              console.log(error);
               this.textSnackbar = "This component already exists";
               this.snackbar = true;
               this.loading = false;

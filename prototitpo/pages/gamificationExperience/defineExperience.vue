@@ -348,10 +348,13 @@
 import { createExperience } from "../../helpers/apiCalls/experience";
 import { getComponents } from "../../helpers/apiCalls/component";
 import { getSubjects } from "../../helpers/apiCalls/subjectMatter";
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
+      config:"",
       subjectMatter: "",
       listSubject: [],
       listGamification: [],
@@ -412,6 +415,9 @@ export default {
     };
   },
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.getAllComponents();
   },
   methods: {
@@ -424,7 +430,7 @@ export default {
           subjectMatter: this.subjectMatter,
           data: this.data,
         };
-        createExperience(info)
+        createExperience(info,this.config)
           .then((response) => {
             this.$refs.form.reset();
             this.textSnackbar = "Created successfully";
@@ -466,9 +472,10 @@ export default {
       }
     },
     getAllComponents() {
-      getComponents()
+      getComponents(Cookie.get("id"),this.config)
         .then((response) => {
           let aux = response.data.data;
+          console.log(aux);
           let temp = aux.filter((e) => e.info.typeComponent == "Gamification");
           this.listGamification = temp.map((e) => e.name);
           temp = aux.filter((e) => e.info.typeComponent == "Traditional");
@@ -481,7 +488,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      getSubjects().then((response) => {
+      getSubjects(this.config).then((response) => {
         this.listSubject = response.data.data.map((e) => e.topic);
       });
     },

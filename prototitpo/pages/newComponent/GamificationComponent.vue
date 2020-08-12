@@ -171,6 +171,7 @@ export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
+      config:"",
       list: [],
       charging: false,
       listSubject: [],
@@ -222,10 +223,13 @@ export default {
     };
   },
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.getAllObjetives();
     this.action = this.$route.query.action;
     if (this.action == "Update") {
-      getComponent(this.$route.query.name).then(response => {
+      getComponent(this.$route.query.name,this.config).then(response => {
         console.log(response.data.data);
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
@@ -270,7 +274,7 @@ export default {
         };
 
         if (this.action == "Update") {
-          updateComponent(this.$route.query.name, info)
+          updateComponent(this.$route.query.name, info,this.config)
             .then(response => {
               this.sendNewFile();
               this.textSnackbar = "Updated successfully";
@@ -283,7 +287,7 @@ export default {
               this.loading = false;
             });
         } else {
-          createComponent(info)
+          createComponent(info,this.config)
             .then(response => {
               this.sendNewFile();
               this.$refs.form.reset();
@@ -305,17 +309,17 @@ export default {
       this.$router.go(-1);
     },
     getAllObjetives: function() {
-      getObjetives().then(response => {
+      getObjetives(this.config).then(response => {
         this.list = response.data.data.map(e => e.name);
       });
-      getSubjects().then(response => {
+      getSubjects(this.config).then(response => {
         this.listSubject = response.data.data.map(e => e.topic);
       });
     },
     addNewObjetive: function() {
       if (this.$refs.form2.validate()) {
         this.charging = true;
-        createObjetive(this.infoObjetive)
+        createObjetive(this.infoObjetive,this.config)
           .then(response => {
             this.getAllObjetives();
             this.$refs.form2.reset();

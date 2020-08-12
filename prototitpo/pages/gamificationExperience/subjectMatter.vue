@@ -47,12 +47,14 @@
 </template>
 <script>
 import { createSubject } from "../../helpers/apiCalls/subjectMatter";
+const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
       loading: false,
+      config:"",
       snackbarSuccess: false,
       snackbar: false,
       textSnackbar: "",
@@ -82,7 +84,11 @@ export default {
       ]
     };
   },
-  mounted() {},
+  mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
+  },
   methods: {
     createSubjectMatter: function() {
       if (this.$refs.form.validate()) {
@@ -94,7 +100,7 @@ export default {
           program: this.program
         };
 
-        createSubject(info)
+        createSubject(info,this.config)
           .then(response => {
             this.$refs.form.reset();
             this.textSnackbar = "Created successfully";

@@ -65,6 +65,7 @@ export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
+      config:"",
       show:false,
       loading: false,
       snackbarSuccess: false,
@@ -97,9 +98,12 @@ export default {
     };
   },
   mounted() {
+    this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.action = this.$route.query.action;
     if (this.action == "Update") {
-      getComponent(this.$route.query.name).then(response => {
+      getComponent(this.$route.query.name,this.config).then(response => {
         console.log(response.data.data);
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
@@ -124,7 +128,7 @@ export default {
         };
         this.sendNewFile()
         if (this.action == "Update") {
-          updateComponent(this.$route.query.name, info)
+          updateComponent(this.$route.query.name, info,this.config)
             .then(response => {
               this.$refs.form.reset();
               this.textSnackbar = "Updated successfully";
@@ -137,7 +141,7 @@ export default {
               this.loading = false;
             });
         } else {
-          createComponent(info)
+          createComponent(info,this.config)
             .then(response => {
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";

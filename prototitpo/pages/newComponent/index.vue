@@ -135,6 +135,7 @@ const Cookie = process.client ? require("js-cookie") : undefined;
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
+    config:"",
     show: {
       name: "",
       
@@ -182,12 +183,15 @@ export default {
     getData:true,
   }),
   mounted() {
+     this.config = {
+      headers: { authorization: Cookie.get("auth") }
+    };
     this.initialize();
     
   },
   methods: {
     initialize() {
-      getComponents(Cookie.get("id"))
+      getComponents(Cookie.get("id"),this.config)
         .then(response => {
           let temp = {},
             aux = response.data.data;
@@ -229,7 +233,7 @@ export default {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         this.desserts.splice(index, 1);
-      deleteComponent(item.id).then(response => {
+      deleteComponent(item.id,this.config).then(response => {
         console.log("entro al delete");
       });
     },
