@@ -76,17 +76,22 @@ export default {
     search: "",
     dialog: false,
     items: [
-      {
-        text: "Index ",
-        disabled: false,
-        to: "/",
-      },
-      {
-        text: "Manage Components",
-        disabled: true,
-        to: "/NewComponent",
-      },
-    ],
+        {
+          text: "Index ",
+          disabled: false,
+          to: "/",
+        },
+        {
+          text: `Gamification Experience`,
+          disabled: true,
+          href: "/gamificationExperience",
+        },
+        {
+          text: `Check Experience`,
+          disabled: true,
+          to: "/",
+        },
+      ],
     headers: [
       {
         text: "Name",

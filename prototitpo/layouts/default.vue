@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
+        <v-list-item v-for="(item, i) in items" color="primary" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -10,7 +10,31 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-      </v-list>
+      
+      <v-list-group
+        prepend-icon="mdi-view-list"
+        value="false"
+        no-action
+      >
+        <template v-slot:activator>
+          <v-list-item-title>Gamification experiences</v-list-item-title>
+        </template> 
+          <v-list-item
+            v-for="(admin, i) in admins"
+            :key="i"
+             
+            :to="admin[2]"
+          >
+            <v-list-item-title v-text="admin[0]"></v-list-item-title>
+            <v-list-item-icon>
+              <v-icon v-text="admin[1]"></v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
+
+        
+    </v-list>
+     
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -56,6 +80,12 @@ export default {
       drawer: true,
       fixed: false,
       items: [],
+      admins: [
+        ['Subject matter', 'mdi-plus-circle-outline','/gamificationExperience/subjectMatter'],
+        ['Define experience', 'mdi-plus-circle-outline','/gamificationExperience/defineExperience'],
+        ['Check experiences', 'mdi-eye','/gamificationExperience/manageExperiences'],
+      ],
+      
       miniVariant: false,
       rightDrawer: false,
       title: "Methodological Gamification",
@@ -80,11 +110,7 @@ export default {
               title: "Manage components",
               to: "/newComponent/",
             },
-            {
-              icon: "mdi-table-edit",
-              title: "Gamification Experience",
-              to: "/gamificationExperience/",
-            },
+            
           ];
         } else {
           this.items = [
@@ -117,9 +143,11 @@ export default {
     },
     search() {
       if (this.searchInput) {
-        let aux= this.searchInput
-        this.searchInput = null
-        this.$router.push(`/gamificationExperience/manageExperiences?search=${aux}`);
+        let aux = this.searchInput;
+        this.searchInput = null;
+        this.$router.push(
+          `/gamificationExperience/manageExperiences?search=${aux}`
+        );
       } else {
         this.$router.push(`/gamificationExperience/manageExperiences`);
       }

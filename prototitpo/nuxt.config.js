@@ -69,6 +69,7 @@ export default {
    
       // With options
       ['cookie-universal-nuxt', { alias: 'cookiz' }],
+      ['nuxt-material-design-icons']
    ],
   
   /*
@@ -86,7 +87,7 @@ export default {
       dark: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
+          primary: colors.red.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

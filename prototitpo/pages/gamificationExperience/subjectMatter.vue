@@ -72,7 +72,7 @@ export default {
         },
         {
           text: "Gamification Experience",
-          disabled: false,
+          disabled: true,
           href: "/gamificationExperience/"
         },
 
