@@ -12,6 +12,10 @@ router.post(
   "/:typeComponent/:nameComponent",
   controller.newFile
 );
+router.post(
+  "/getPdf/",
+  controller.createPDF
+);
 
 
 

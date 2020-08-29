@@ -1,6 +1,6 @@
 <template>
   <client-only placeholder="Loading...">
-    <v-card>
+    <v-card >
       <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{ textSnackbar }}</v-snackbar>
       <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{ textSnackbar }}</v-snackbar>
       <v-card-title>

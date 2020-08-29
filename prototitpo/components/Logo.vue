@@ -5,9 +5,12 @@
     <div class="Triangle Triangle--three" />
     <div class="Triangle Triangle--four" />
   </div>
+
 </template>
 
 <style>
+
+
 .VueToNuxtLogo {
   display: inline-block;
   animation: turn 2s linear forwards 1s;

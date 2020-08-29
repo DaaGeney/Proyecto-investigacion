@@ -15,7 +15,7 @@ const mailDetails = (email, token) => {
         from: 'notifications@udem.edu.co',
         to: email,
         subject: 'Password recovery',
-        text: `http://localhost:3000/restorePassword?token=${token}&user=${email}`
+        text: `To recover your password click here: http://localhost:3000/restorePassword?token=${token}&user=${email}`
     }
     mailTransporter.sendMail(info)
 };

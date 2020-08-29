@@ -66,7 +66,7 @@
                                 color="primary"
                                 v-on="on"
                                 text
-                              >Olvidé mi contraseña</v-btn>
+                              >I forgot my password</v-btn>
                             </template>
 
                             <v-form
@@ -76,12 +76,12 @@
                             >
                               <v-card>
                                 <v-progress-linear
-                      :active="waiting"
-                      :indeterminate="waiting"
-                      absolute
-                      bottom
-                      color="primary"
-                    ></v-progress-linear>
+                                  :active="waiting"
+                                  :indeterminate="waiting"
+                                  absolute
+                                  bottom
+                                  color="primary"
+                                ></v-progress-linear>
                                 <v-card-title
                                   class="headline grey lighten-2"
                                   primary-title
@@ -110,7 +110,6 @@
                           </v-dialog>
                         </div>
                       </v-col>
-                      
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -185,9 +184,7 @@
                       <v-btn color="primary" type="submit">Sign UP</v-btn>
                     </v-card-actions>
                   </v-card>
-                  
                 </v-form>
-                
               </v-col>
             </v-row>
           </v-container>
@@ -200,14 +197,14 @@
 <script>
 import { logIn } from "../helpers/apiCalls/auth";
 const Cookie = process.client ? require("js-cookie") : undefined;
-import { createUser,sendEmail } from "../helpers/apiCalls/auth";
+import { createUser, sendEmail } from "../helpers/apiCalls/auth";
 
 export default {
   data() {
     return {
-      restoreEmail:"",
-      waiting:false,
-      dialog:false,
+      restoreEmail: "",
+      waiting: false,
+      dialog: false,
       name: "",
       register: false,
       loading: false,
@@ -260,42 +257,42 @@ export default {
     registerUser() {
       if (this.$refs.form.validate()) {
         let user = {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        role: "teacher",
-      };
-      createUser(user)
-        .then((response) => {
-          this.$refs.form.reset();
-          this.textSnackbar = "Created successfully";
-          this.snackbarSuccess = true;
-          this.change();
-        })
-        .catch((error) => {
-          this.textSnackbar = "This email already exists";
-          this.snackbar = true;
-        });
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          role: "teacher",
+        };
+        createUser(user)
+          .then((response) => {
+            this.$refs.form.reset();
+            this.textSnackbar = "Created successfully";
+            this.snackbarSuccess = true;
+            this.change();
+          })
+          .catch((error) => {
+            this.textSnackbar = "This email already exists";
+            this.snackbar = true;
+          });
       }
     },
-     restorePassword: function() {
+    restorePassword: function () {
       if (this.$refs.formRestore.validate()) {
-        this.waiting=true
+        this.waiting = true;
         sendEmail({ email: this.restoreEmail })
-          .then(response => {
+          .then((response) => {
             this.textSnackbar = "The link was send to email";
             this.snackbarSuccess = true;
             this.$refs.formRestore.reset();
-            this.waiting=false
+            this.waiting = false;
             this.dialog = false;
           })
-          .catch(error => {
+          .catch((error) => {
             this.textSnackbar = "This email isn't registered";
             this.snackbar = true;
-            this.waiting=false
+            this.waiting = false;
           });
-      } 
-    }
+      }
+    },
   },
 };
 </script>
