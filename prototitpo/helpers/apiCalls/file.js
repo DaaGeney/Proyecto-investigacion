@@ -16,10 +16,12 @@ export const getPdf = () => {
     return axios.post(`${url}/file/getPdf`, { responseType: 'blob' });
 };
 
-export const retrievePDF = () => {
+export const retrievePDF = (body) => {
     let jsonRetrievePDF = {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify(body)
+        
     };
     return fetch(`${url}/file/getPdf`, jsonRetrievePDF);
 };

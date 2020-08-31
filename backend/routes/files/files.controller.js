@@ -25,7 +25,8 @@ const path = require("path");
 
 
 function createPDF(req, res) {
- 
+  const {htmlFacilitation,htmlCore,htmlEval } = req.body
+  let json = {holis: "holis"}
   if (true) {
     pdf
       .create(
@@ -35,24 +36,75 @@ function createPDF(req, res) {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
         .rectangle {
-          min-height: 50px;
+        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png") ;
+          background-size:     100% 100%;                      /* <------ */
+          background-repeat:   no-repeat;
+          background-position: center center; 
+          min-height: 70px;
           max-height: 200px;
-          height: auto;
-          min-width: 100px;
-          max-width: 140px;
-          width: auto;
-          background-color: #68C9BF;
-          border-color: #000;
-          border-style: solid;
+          min-width: 130px;
+          max-width: 170px;
+          display: inline-block;
+          text-align: center;
+
+        
         }
+        .pentagono {
+        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/pentagono.png") ;
+          background-size:     100% 100%;                      /* <------ */
+          background-repeat:   no-repeat;
+          background-position: center center; 
+          min-height: 70px;
+          max-height: 200px;
+          min-width: 130px;
+          max-width: 170px;
+          display: inline-block;
+          text-align: center;
+
+        
+        }
+        .hexagono {
+        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png") ;
+          background-size:     100% 100%;                      /* <------ */
+          background-repeat:   no-repeat;
+          background-position: center center; 
+          min-height: 70px;
+          max-height: 200px;
+          text-align: center;
+          min-width: 130px;
+          max-width: 170px;
+            display: inline-block;
+        
+        }
+        .rombo {
+        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rombo.png") ;
+           background-size:     100% 100%;                      /* <------ */
+          background-repeat:   no-repeat;
+          background-position: center center; 
+          min-height: 70px;
+          max-height: 200px;
+          text-align: center;
+
+          min-width: 130px;
+          max-width: 170px;
+            display: inline-block;
+        
+        }
+        
         .item1 {
           grid-area: header;
+          border: 1px solid #000; 
+
         }
         .item2 {
           grid-area: main;
+          border: 1px solid #000;
+
         }
         .item3 {
           grid-area: footer;
+          border: 1px solid #000;
+
         }
         
         .grid-container {
@@ -61,14 +113,14 @@ function createPDF(req, res) {
             "header header header header header header"
             "main main main main main main"
             "footer footer footer footer footer footer";
-          grid-gap: 1px;
-          background-color: #2196f3;
-          padding: 1px;
+            grid-gap: 5px;
+            background-color: #2196f3;
+            padding: 1px;
+            border: 1px solid #000;
         }
         
         .grid-container > div {
           background-color: rgba(255, 255, 255, 0.8);
-          text-align: center;
           padding: 20px 45px;
           font-size: 20px;
         }
@@ -76,20 +128,42 @@ function createPDF(req, res) {
         </head>
         <body>
         <div class="grid-container">
+        
                 <div class="item1">
-        <div class="rectangle">holis lol lol sds sdsds dsdsd fdfdf dfdfd</div>
+                Phase 1: Facilitation
+                <br>
+                <br>
+                  ${htmlFacilitation}
                 </div>
-                <div class="item2">Main</div>
-                <div class="item3">Footer</div>
-              </div>
-        
-        
+                <div class="item2">
+                Phase 2: Core
+                <br>
+                <br>
+                  ${htmlCore}
+                </div>
+                <div class="item3">
+                Phase 3: evaluation
+                <br>
+                <br>
+                ${htmlEval}
+                
+                </div>
+                
+        </div>
+        <br>
+        <img src="https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/helper.png" alt="Error" width="400" height="150">
+        <h1>Phase 1: Facilitation</h1>
+        ${htmlFacilitation}
+        ${json}
         </body>
-        </html>`,
+        </html> 
+        `,
         {
           format: "Letter",
           border: {
             top: "0.5in",
+            left:"0.5in",
+            right:"0.4in",
             bottom: "0.5in",
           },
         }

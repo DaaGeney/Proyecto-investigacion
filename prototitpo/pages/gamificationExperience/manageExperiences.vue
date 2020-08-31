@@ -76,22 +76,22 @@ export default {
     search: "",
     dialog: false,
     items: [
-        {
-          text: "Index ",
-          disabled: false,
-          to: "/",
-        },
-        {
-          text: `Gamification Experience`,
-          disabled: true,
-          href: "/gamificationExperience",
-        },
-        {
-          text: `Check Experience`,
-          disabled: true,
-          to: "/",
-        },
-      ],
+      {
+        text: "Index ",
+        disabled: false,
+        to: "/",
+      },
+      {
+        text: `Gamification Experience`,
+        disabled: true,
+        href: "/gamificationExperience",
+      },
+      {
+        text: `Check Experience`,
+        disabled: true,
+        to: "/",
+      },
+    ],
     headers: [
       {
         text: "Name",
@@ -117,12 +117,57 @@ export default {
   },
   methods: {
     generate(item) {
-      retrievePDF().then(res=>res.blob()).then((result) => {
-        const pdfGen = new Blob([result], { type: "application/pdf" });
-        saveAs(pdfGen, "Resultado.pdf");
-      });
+      console.log(item);
+      let htmlFacilitation = `<div class="rombo"> 
+             <p> ${item.facilitation.gamification}</p>
+          </div>`
+      let htmlCore = this.getHtml(item.core);
+      let htmlEval = this.getHtml(item.evaluation)
+      let json= {
+        htmlFacilitation: htmlFacilitation,
+        htmlCore: htmlCore,
+        htmlEval, htmlEval
+      }
+      retrievePDF(json)
+        .then((res) => res.blob())
+        .then((result) => {
+          const pdfGen = new Blob([result], { type: "application/pdf" });
+          saveAs(pdfGen, "Resultado.pdf");
+        });
     },
 
+    getHtml(array) {
+      let html=``
+      if(array.gamification){
+        array.gamification.forEach((element) => {
+        html += `<div class="rombo"> 
+             <p> ${element}</p>
+          </div>`;
+      });
+      }
+      if(array.technological){
+        array.technological.forEach((element) => {
+        html += `<div class="pentagono"> 
+             <p> ${element}</p>
+          </div>`;
+      });
+      }
+      if(array.web20){
+         array.web20.forEach((element) => {
+        html += `<div class="hexagono"> 
+             <p> ${element}</p>
+          </div>`;
+      });
+      }
+      if(array.traditional){
+        array.traditional.forEach((element) => {
+        html += `<div class="rectangle"> 
+             <p> ${element}</p>
+          </div>`;
+      });
+      } 
+      return html;
+    },
     initialize() {
       getExperiences(this.config)
         .then((response) => {
@@ -134,9 +179,9 @@ export default {
               name: aux[i].name,
               description: aux[i].description,
               subjectMatter: aux[i].subjectMatter,
-              core:aux[i].data.core,
-              evaluation:aux[i].data.evaluation,
-              facilitation:aux[i].data.facilitation
+              core: aux[i].data.core,
+              evaluation: aux[i].data.evaluation,
+              facilitation: aux[i].data.facilitation,
             };
             this.desserts.push(temp);
           }
