@@ -119,11 +119,7 @@ export default {
               title: "Manage components",
               to: "/newComponent/",
             },
-            {
-              icon: "mdi-table-edit",
-              title: "Gamification Experience",
-              to: "/gamificationExperience/",
-            },
+            
           ];
         }
       })

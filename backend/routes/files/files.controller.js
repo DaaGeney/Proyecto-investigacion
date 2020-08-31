@@ -30,21 +30,62 @@ function createPDF(req, res) {
     pdf
       .create(
         `<!DOCTYPE html>
-      <html>
+        <html>
         <head>
-          
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        .rectangle {
+          min-height: 50px;
+          max-height: 200px;
+          height: auto;
+          min-width: 100px;
+          max-width: 140px;
+          width: auto;
+          background-color: #68C9BF;
+          border-color: #000;
+          border-style: solid;
+        }
+        .item1 {
+          grid-area: header;
+        }
+        .item2 {
+          grid-area: main;
+        }
+        .item3 {
+          grid-area: footer;
+        }
+        
+        .grid-container {
+          display: grid;
+          grid-template-areas:
+            "header header header header header header"
+            "main main main main main main"
+            "footer footer footer footer footer footer";
+          grid-gap: 1px;
+          background-color: #2196f3;
+          padding: 1px;
+        }
+        
+        .grid-container > div {
+          background-color: rgba(255, 255, 255, 0.8);
+          text-align: center;
+          padding: 20px 45px;
+          font-size: 20px;
+        }
+        </style>
         </head>
         <body>
-          <div>
-            <div>
-              <div>
-                <h2 style="text-align: center; float: left; margin-left: 50px;">Informe final</h2>
+        <div class="grid-container">
+                <div class="item1">
+        <div class="rectangle">holis lol lol sds sdsds dsdsd fdfdf dfdfd</div>
+                </div>
+                <div class="item2">Main</div>
+                <div class="item3">Footer</div>
               </div>
-            </div>
-            <h3 style="text-align: center">Resultados</h3>
-          </div>
+        
+        
         </body>
-      </html>`,
+        </html>`,
         {
           format: "Letter",
           border: {
