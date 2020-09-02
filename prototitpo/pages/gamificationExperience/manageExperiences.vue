@@ -50,12 +50,14 @@
 const Cookie = process.client ? require("js-cookie") : undefined;
 import { getExperiences } from "../../helpers/apiCalls/experience";
 import { retrievePDF } from "../../helpers/apiCalls/file";
+import { getComponent } from "../../helpers/apiCalls/component";
 
 import { saveAs } from "file-saver";
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
     config: "",
+    infoComponent: "",
     show: {
       name: "",
       info: {
@@ -116,18 +118,141 @@ export default {
       : undefined;
   },
   methods: {
-    generate(item) {
-      console.log(item);
-      let htmlFacilitation = `<div class="rombo"> 
-             <p> ${item.facilitation.gamification}</p>
-          </div>`
+    async generate(item) {
+      let htmlFacilitation = this.getHtml(item.facilitation);
       let htmlCore = this.getHtml(item.core);
-      let htmlEval = this.getHtml(item.evaluation)
-      let json= {
+      let htmlEval = this.getHtml(item.evaluation);
+      const getInfo = (dataComponent) => {
+        return new Promise((resolve) => {
+          getComponent(dataComponent, this.config).then((response) => {
+            resolve(`
+            <div class="rombo"> 
+             <p> ${dataComponent}</p>
+            </div><div class="b">
+              <p>Name: ${dataComponent}<br>
+              Description: ${response.data.data.info.description}<br>
+              Instructors Instructions: ${response.data.data.info.instructorsInstructions}<br>
+              Learning Objetives: ${response.data.data.info.learningObjetive}</br>
+              Length: ${response.data.data.info.length} <br>
+              Materials: ${response.data.data.info.materials} <br>
+              Purpose: ${response.data.data.info.purpose} <br>
+              Space: ${response.data.data.info.space} <br>
+              Students Instructions: ${response.data.data.info.studentsInstructions} <br>
+              Students Per Team: ${response.data.data.info.studentsTeam} <br>
+              subject Matter: ${response.data.data.info.subjectMatter} <br>
+              Url: ${response.data.data.info.url} <br>
+              </p>
+            </div>
+            <br>`);
+          });
+        });
+      };
+      const getInfoTraditional = (dataComponent) => {
+        return new Promise((resolve) => {
+          getComponent(dataComponent, this.config).then((response) => {
+            resolve(`
+            <div class="rectangle"> 
+             <p> ${dataComponent}</p>
+            </div><div class="b">
+              <p>Name: ${dataComponent}<br>
+              Description: ${response.data.data.info.description}<br>
+              Url: ${response.data.data.info.url} <br>
+              </p>
+            </div>
+            <br>`);
+          });
+        });
+      };
+      const getInfoTech = (dataComponent) => {
+        return new Promise((resolve) => {
+          getComponent(dataComponent, this.config).then((response) => {
+            resolve(`
+            <div class="pentagono"> 
+             <p> ${dataComponent}</p>
+            </div><div class="b">
+              <p>Name: ${dataComponent}<br>
+              Description: ${response.data.data.info.description}<br>
+              Url: ${response.data.data.info.url} <br>
+              </p>
+            </div>
+            <br>`);
+          });
+        });
+      };
+      const getInfoWeb = (dataComponent) => {
+        return new Promise((resolve) => {
+          getComponent(dataComponent, this.config).then((response) => {
+            resolve(`
+            <div class="hexagono"> 
+             <p> ${dataComponent}</p>
+            </div><div class="b">
+              <p>Name: ${dataComponent}<br>
+              Description: ${response.data.data.info.description}<br>
+              Url: ${response.data.data.info.url} <br>
+              </p>
+            </div>
+            <br>`);
+          });
+        });
+      };
+      let core = "";
+      const componentsFacilitation = await Promise.all(
+        item.facilitation.gamification.map(async (e) => await getInfo(e))
+      );
+      const componentsCore = await Promise.all(
+        item.core.gamification.map(async (e) => await getInfo(e))
+      );
+      const componentsCoreTech = await Promise.all(
+        item.core.technological.map(async (e) => await getInfoTech(e))
+      );
+
+      let evaluat = "";
+      const componentsEvaluation = await Promise.all(
+        item.evaluation.gamification.map(async (e) => await getInfo(e))
+      );
+      const componentsEvalTech = await Promise.all(
+        item.evaluation.technological.map(async (e) => await getInfoTech(e))
+      );
+      evaluat = componentsEvaluation.toString() + componentsEvalTech.toString();
+
+      core = componentsCore.toString() + componentsCoreTech.toString();
+      if (item.core.traditional && Array.isArray(item.core.traditional)) {
+        const componentsCoreTradi = await Promise.all(
+          item.core.traditional.map(async (e) => await getInfoTraditional(e))
+        );
+        core += componentsCoreTradi.toString();
+      }
+      if (item.core.web20 && Array.isArray(item.core.web20)) {
+        const componentsCoreWeb = await Promise.all(
+          item.core.web20.map(async (e) => await getInfoWeb(e))
+        );
+        core += componentsCoreWeb.toString();
+      }
+      if (item.evaluation.traditional && Array.isArray(item.evaluation.traditional)) {
+        const componentsEvalTradi = await Promise.all(
+          item.evaluation.traditional.map(async (e) => await getInfoTraditional(e))
+        );
+        evaluat += componentsEvalTradi.toString();
+      }
+      if (item.evaluation.web20 && Array.isArray(item.evaluation.web20)) {
+        const componentsEvalWeb = await Promise.all(
+          item.evaluation.web20.map(async (e) => await getInfoWeb(e))
+        );
+        evaluat += componentsEvalWeb.toString();
+      }
+
+      let json = {
+        name: item.name,
+        subjectMatter: item.subjectMatter,
+        description: item.description,
         htmlFacilitation: htmlFacilitation,
         htmlCore: htmlCore,
-        htmlEval, htmlEval
-      }
+        htmlEval: htmlEval,
+        infoComponentsFaciltiation: componentsFacilitation.toString(),
+        infoComponentsCore: core,
+        infoComponentsEval: evaluat
+
+      };
       retrievePDF(json)
         .then((res) => res.blob())
         .then((result) => {
@@ -137,41 +262,40 @@ export default {
     },
 
     getHtml(array) {
-      let html=``
-      if(array.gamification){
+      let html = ``;
+      if (array.gamification) {
         array.gamification.forEach((element) => {
-        html += `<div class="rombo"> 
+          html += `<div class="rombo"> 
              <p> ${element}</p>
           </div>`;
-      });
+        });
       }
-      if(array.technological){
+      if (array.technological) {
         array.technological.forEach((element) => {
-        html += `<div class="pentagono"> 
+          html += `<div class="pentagono"> 
              <p> ${element}</p>
           </div>`;
-      });
+        });
       }
-      if(array.web20){
-         array.web20.forEach((element) => {
-        html += `<div class="hexagono"> 
+      if (array.web20) {
+        array.web20.forEach((element) => {
+          html += `<div class="hexagono"> 
              <p> ${element}</p>
           </div>`;
-      });
+        });
       }
-      if(array.traditional){
+      if (array.traditional) {
         array.traditional.forEach((element) => {
-        html += `<div class="rectangle"> 
+          html += `<div class="rectangle"> 
              <p> ${element}</p>
           </div>`;
-      });
-      } 
+        });
+      }
       return html;
     },
     initialize() {
       getExperiences(this.config)
         .then((response) => {
-          console.log(response);
           let temp = {},
             aux = response.data.data;
           for (let i = 0; i < aux.length; i++) {

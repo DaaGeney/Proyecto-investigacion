@@ -25,8 +25,7 @@ const path = require("path");
 
 
 function createPDF(req, res) {
-  const {htmlFacilitation,htmlCore,htmlEval } = req.body
-  let json = {holis: "holis"}
+  const {name,description,subjectMatter, htmlFacilitation,htmlCore,htmlEval,infoComponentsEval,infoComponentsFaciltiation,infoComponentsCore } = req.body
   if (true) {
     pdf
       .create(
@@ -35,6 +34,9 @@ function createPDF(req, res) {
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
+        div.b {
+          line-height: 1.6;
+        }
         .rectangle {
         background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png") ;
           background-size:     100% 100%;                      /* <------ */
@@ -124,9 +126,18 @@ function createPDF(req, res) {
           padding: 20px 45px;
           font-size: 20px;
         }
+       
         </style>
         </head>
         <body>
+        
+        <h1>Gamification Experience: ${name}</h1>
+        <h3>Subject Matter: ${subjectMatter}</h3>
+        <div class="b">
+        <h3 >Description: </h3>
+        <p >${description}</p>
+        </div>
+        
         <div class="grid-container">
         
                 <div class="item1">
@@ -147,14 +158,17 @@ function createPDF(req, res) {
                 <br>
                 ${htmlEval}
                 
-                </div>
+            </div>
                 
         </div>
         <br>
         <img src="https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/helper.png" alt="Error" width="400" height="150">
-        <h1>Phase 1: Facilitation</h1>
-        ${htmlFacilitation}
-        ${json}
+        <h2>Phase 1: Facilitation</h2>
+        ${infoComponentsFaciltiation}
+        <h2>Phase 2: Core</h2>
+        ${infoComponentsCore}
+        <h2>Phase 3: Evaluation</h2>
+        ${infoComponentsEval}
         </body>
         </html> 
         `,

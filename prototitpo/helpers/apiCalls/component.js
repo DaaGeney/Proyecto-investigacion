@@ -10,7 +10,7 @@ export const getComponents = (id,config) => {
 export const updateComponent = (pastName, body,config) => {
   return axios.post(`${url}/updateComponent/${pastName}`,body,config);
 };
-export const getComponent = (name,config) => {
+ export  const getComponent = (name,config) => {
   return axios.get(`${url}/getComponent/${name}`,config);
 };
 export const deleteComponent = (id,config) => {
