@@ -192,7 +192,7 @@ export default {
       materials: "",
       subjectMatter: "",
       purpose: "",
-      learningObjetive: "",
+      learningObjetive: [],
       studentsInstructions: "",
       instructorsInstructions: "",
       files: [],

@@ -129,18 +129,18 @@ export default {
             <div class="rombo"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
-              <p>Name: ${dataComponent}<br>
-              Description: ${response.data.data.info.description}<br>
-              Instructors Instructions: ${response.data.data.info.instructorsInstructions}<br>
-              Learning Objetives: ${response.data.data.info.learningObjetive}</br>
-              Length: ${response.data.data.info.length} <br>
-              Materials: ${response.data.data.info.materials} <br>
-              Purpose: ${response.data.data.info.purpose} <br>
-              Space: ${response.data.data.info.space} <br>
-              Students Instructions: ${response.data.data.info.studentsInstructions} <br>
-              Students Per Team: ${response.data.data.info.studentsTeam} <br>
-              subject Matter: ${response.data.data.info.subjectMatter} <br>
-              Url: ${response.data.data.info.url} <br>
+              <p> <strong>Name: </strong>${dataComponent}<br>
+              <strong> Description: </strong>${response.data.data.info.description}<br>
+              <strong>Instructors Instructions:</strong> ${response.data.data.info.instructorsInstructions}<br>
+             <strong> Learning Objetives: </strong>${response.data.data.info.learningObjetive}</br>
+              <strong>Length: </strong>${response.data.data.info.length} <br>
+              <strong>Materials:</strong> ${response.data.data.info.materials} <br>
+             <strong> Purpose:</strong> ${response.data.data.info.purpose} <br>
+             <strong> Space:</strong> ${response.data.data.info.space} <br>
+              <strong>Students Instructions:</strong> ${response.data.data.info.studentsInstructions} <br>
+              <strong>Students Per Team: </strong>${response.data.data.info.studentsTeam} <br>
+              <strong>subject Matter:</strong> ${response.data.data.info.subjectMatter} <br>
+             <strong> Url: </strong>${response.data.data.info.url} <br>
               </p>
             </div>
             <br>`);
@@ -154,9 +154,9 @@ export default {
             <div class="rectangle"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
-              <p>Name: ${dataComponent}<br>
-              Description: ${response.data.data.info.description}<br>
-              Url: ${response.data.data.info.url} <br>
+              <p> <strong> Name:</strong> ${dataComponent}<br>
+              <strong> Description: </strong>${response.data.data.info.description}<br>
+             <strong>  Url:</strong>  ${response.data.data.info.url} <br>
               </p>
             </div>
             <br>`);
@@ -168,11 +168,11 @@ export default {
           getComponent(dataComponent, this.config).then((response) => {
             resolve(`
             <div class="pentagono"> 
-             <p> ${dataComponent}</p>
+             <p>  ${dataComponent}</p>
             </div><div class="b">
-              <p>Name: ${dataComponent}<br>
-              Description: ${response.data.data.info.description}<br>
-              Url: ${response.data.data.info.url} <br>
+              <p><strong> Name:</strong> ${dataComponent}<br>
+             <strong>  Description: </strong> ${response.data.data.info.description}<br>
+              <strong> Url:</strong> ${response.data.data.info.url} <br>
               </p>
             </div>
             <br>`);
@@ -186,9 +186,9 @@ export default {
             <div class="hexagono"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
-              <p>Name: ${dataComponent}<br>
-              Description: ${response.data.data.info.description}<br>
-              Url: ${response.data.data.info.url} <br>
+              <p><strong>Name:</strong>  ${dataComponent}<br>
+             <strong> Description: </strong> ${response.data.data.info.description}<br>
+             <strong>  Url: </strong> ${response.data.data.info.url} <br>
               </p>
             </div>
             <br>`);

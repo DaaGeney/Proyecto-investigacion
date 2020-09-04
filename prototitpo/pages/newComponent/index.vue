@@ -1,7 +1,61 @@
 <template>
 
-  <client-only placeholder="Loading...">
-    <v-card>
+  <v-card>
+    <v-dialog v-model="dialog" width="600px">
+          
+          <v-card>
+            <v-card-title>
+              <span class="headline">Info component</span>
+            </v-card-title>
+            <v-card-text>
+              <v-text-field v-model="show.name" label="Name" disabled></v-text-field>
+              <v-textarea v-model="show.info.description" label="Description" rows="1" disabled></v-textarea>
+              <v-text-field v-model="show.info.url" label="URL" disabled></v-text-field>
+              <v-text-field v-model="show.info.typeComponent" label="Type Component" disabled></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.studentsTeam"
+                label="Students per Team"
+                disabled
+              ></v-text-field>
+              <v-textarea
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.length"
+                label="Length"
+                disabled
+                rows="1"
+              ></v-textarea>
+              <v-text-field
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.space"
+                label="Space"
+                disabled
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.materials"
+                label="Materials"
+                disabled
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.subjectMatter"
+                label="Subject Matter"
+                disabled
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent=='Gamification'"
+                v-model="show.info.purpose"
+                label="Purpose"
+                disabled
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="dialog = false">Exit</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       <v-card-title>
         <div>
           <v-breadcrumbs :items="items">
@@ -59,70 +113,13 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-dialog v-model="dialog" width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon small class="mr-2" @click="showItem(item)" v-bind="attrs" v-on="on">mdi-eye</v-icon>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Info component</span>
-            </v-card-title>
-            <v-card-text>
-              <v-text-field v-model="show.name" label="Name" disabled></v-text-field>
-              <v-textarea v-model="show.info.description" label="Description" rows="1" disabled></v-textarea>
-              <v-text-field v-model="show.info.url" label="URL" disabled></v-text-field>
-              <v-text-field v-model="show.info.typeComponent" label="Type Component" disabled></v-text-field>
-              <v-text-field
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.studentsTeam"
-                label="Students per Team"
-                disabled
-              ></v-text-field>
-              <v-textarea
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.length"
-                label="Length"
-                disabled
-                rows="1"
-              ></v-textarea>
-              <v-text-field
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.space"
-                label="Space"
-                disabled
-              ></v-text-field>
-              <v-text-field
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.materials"
-                label="Materials"
-                disabled
-              ></v-text-field>
-              <v-text-field
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.subjectMatter"
-                label="Subject Matter"
-                disabled
-              ></v-text-field>
-              <v-text-field
-                v-if="show.info.typeComponent=='Gamification'"
-                v-model="show.info.purpose"
-                label="Purpose"
-                disabled
-              ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="dialog = false">Exit</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
+        
+<v-icon small class="mr-2" @click="showItem(item)" >mdi-eye</v-icon>
         <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
     </v-card>
-  </client-only>
 </template>
 
 <script>
@@ -131,7 +128,6 @@ import {
   deleteComponent
 } from "../../helpers/apiCalls/component";
 const Cookie = process.client ? require("js-cookie") : undefined;
-
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
@@ -211,7 +207,6 @@ export default {
         .catch(error => {});
         this.getData=false
     },
-
     editItem(item) {
       if (item.type == "Gamification") {
         this.$router.push(
@@ -228,7 +223,6 @@ export default {
           `/newComponent/additionalComponent?typeComponent=${item.type}&action=Update&name=${item.name}`
         );
     },
-
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
@@ -238,6 +232,7 @@ export default {
       });
     },
     showItem(item) {
+      this.dialog=true
       this.show = item;
       console.log(this.show);
     }
