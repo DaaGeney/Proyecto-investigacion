@@ -33,66 +33,47 @@ function createPDF(req, res) {
         <html>
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&display=swap" rel="stylesheet">        
         <style>
+        
+        html {
+          font-family: 'Open Sans', sans-serif;
+          text-align: justify;
+        }
+
         div.b {
           line-height: 1.6;
         }
+        
+        .rombo, .hexagono, .pentagono, .rectangle {
+          background-size:     100% 100%;                      /* <------ */
+          background-repeat:   no-repeat;
+          background-position: center center; 
+          min-height: 70px;
+          max-height: 200px;
+          min-width: 130px;
+          max-width: 170px;
+          display: inline-block;
+          text-align: center;
+          font-size: 15px;
+        }
+
         .rectangle {
-        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png") ;
-          background-size:     100% 100%;                      /* <------ */
-          background-repeat:   no-repeat;
-          background-position: center center; 
-          min-height: 70px;
-          max-height: 200px;
-          min-width: 130px;
-          max-width: 170px;
-          display: inline-block;
-          text-align: center;
-
-        
+          background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png") ;
         }
+
         .pentagono {
-        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/pentagono.png") ;
-          background-size:     100% 100%;                      /* <------ */
-          background-repeat:   no-repeat;
-          background-position: center center; 
-          min-height: 70px;
-          max-height: 200px;
-          min-width: 130px;
-          max-width: 170px;
-          display: inline-block;
-          text-align: center;
-
-        
+          background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/pentagono.png") ;
         }
+        
         .hexagono {
-        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png") ;
-          background-size:     100% 100%;                      /* <------ */
-          background-repeat:   no-repeat;
-          background-position: center center; 
-          min-height: 70px;
-          max-height: 200px;
-          text-align: center;
-          min-width: 130px;
-          max-width: 170px;
-            display: inline-block;
-        
+          background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png") ;
         }
-        .rombo {
-        background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rombo.png") ;
-           background-size:     100% 100%;                      /* <------ */
-          background-repeat:   no-repeat;
-          background-position: center center; 
-          min-height: 70px;
-          max-height: 200px;
-          text-align: center;
 
-          min-width: 130px;
-          max-width: 170px;
-            display: inline-block;
-        
+        .rombo {
+            background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rombo.png") ;
         }
-        
+
         .item1 {
           grid-area: header;
           border: 1px solid #000; 

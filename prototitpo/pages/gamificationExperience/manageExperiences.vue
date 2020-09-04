@@ -2,6 +2,9 @@
   <client-only placeholder="Loading...">
     <div ref="content">
       <v-card>
+        <v-overlay v-model="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
         <v-card-title>
           <div>
             <v-breadcrumbs :items="items">
@@ -57,6 +60,7 @@ export default {
   middleware: "authenticatedAdmin",
   data: () => ({
     config: "",
+    overlay: false,
     infoComponent: "",
     show: {
       name: "",
@@ -122,10 +126,12 @@ export default {
       let htmlFacilitation = this.getHtml(item.facilitation);
       let htmlCore = this.getHtml(item.core);
       let htmlEval = this.getHtml(item.evaluation);
+      this.overlay = true;
       const getInfo = (dataComponent) => {
         return new Promise((resolve) => {
           getComponent(dataComponent, this.config).then((response) => {
-            resolve(`
+            if (response.data.data) {
+              resolve(`
             <div class="rombo"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
@@ -144,13 +150,17 @@ export default {
               </p>
             </div>
             <br>`);
+            } else {
+              resolve("");
+            }
           });
         });
       };
       const getInfoTraditional = (dataComponent) => {
         return new Promise((resolve) => {
           getComponent(dataComponent, this.config).then((response) => {
-            resolve(`
+            if (response.data.data) {
+              resolve(`
             <div class="rectangle"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
@@ -160,13 +170,17 @@ export default {
               </p>
             </div>
             <br>`);
+            } else {
+              resolve("");
+            }
           });
         });
       };
       const getInfoTech = (dataComponent) => {
         return new Promise((resolve) => {
           getComponent(dataComponent, this.config).then((response) => {
-            resolve(`
+            if (response.data.data) {
+              resolve(`
             <div class="pentagono"> 
              <p>  ${dataComponent}</p>
             </div><div class="b">
@@ -176,13 +190,17 @@ export default {
               </p>
             </div>
             <br>`);
+            } else {
+              resolve("");
+            }
           });
         });
       };
       const getInfoWeb = (dataComponent) => {
         return new Promise((resolve) => {
           getComponent(dataComponent, this.config).then((response) => {
-            resolve(`
+            if (response.data.data) {
+              resolve(`
             <div class="hexagono"> 
              <p> ${dataComponent}</p>
             </div><div class="b">
@@ -192,6 +210,9 @@ export default {
               </p>
             </div>
             <br>`);
+            } else {
+              resolve("");
+            }
           });
         });
       };
@@ -213,32 +234,38 @@ export default {
       const componentsEvalTech = await Promise.all(
         item.evaluation.technological.map(async (e) => await getInfoTech(e))
       );
-      evaluat = componentsEvaluation.toString() + componentsEvalTech.toString();
+      evaluat = componentsEvaluation.join() + componentsEvalTech.join();
 
-      core = componentsCore.toString() + componentsCoreTech.toString();
+      core = componentsCore.join() + componentsCoreTech.join();
       if (item.core.traditional && Array.isArray(item.core.traditional)) {
         const componentsCoreTradi = await Promise.all(
           item.core.traditional.map(async (e) => await getInfoTraditional(e))
         );
-        core += componentsCoreTradi.toString();
+        core += componentsCoreTradi.join();
       }
       if (item.core.web20 && Array.isArray(item.core.web20)) {
         const componentsCoreWeb = await Promise.all(
           item.core.web20.map(async (e) => await getInfoWeb(e))
         );
-        core += componentsCoreWeb.toString();
+        core += componentsCoreWeb.join();
+        
       }
-      if (item.evaluation.traditional && Array.isArray(item.evaluation.traditional)) {
+      if (
+        item.evaluation.traditional &&
+        Array.isArray(item.evaluation.traditional)
+      ) {
         const componentsEvalTradi = await Promise.all(
-          item.evaluation.traditional.map(async (e) => await getInfoTraditional(e))
+          item.evaluation.traditional.map(
+            async (e) => await getInfoTraditional(e)
+          )
         );
-        evaluat += componentsEvalTradi.toString();
+        evaluat += componentsEvalTradi.join();
       }
       if (item.evaluation.web20 && Array.isArray(item.evaluation.web20)) {
         const componentsEvalWeb = await Promise.all(
           item.evaluation.web20.map(async (e) => await getInfoWeb(e))
         );
-        evaluat += componentsEvalWeb.toString();
+        evaluat += componentsEvalWeb.join();
       }
 
       let json = {
@@ -248,16 +275,16 @@ export default {
         htmlFacilitation: htmlFacilitation,
         htmlCore: htmlCore,
         htmlEval: htmlEval,
-        infoComponentsFaciltiation: componentsFacilitation.toString(),
-        infoComponentsCore: core,
-        infoComponentsEval: evaluat
-
+        infoComponentsFaciltiation: componentsFacilitation.join().replace(">,",">"),
+        infoComponentsCore: core.replace(">,",">"),
+        infoComponentsEval: evaluat.replace(">,",">"),
       };
       retrievePDF(json)
         .then((res) => res.blob())
         .then((result) => {
           const pdfGen = new Blob([result], { type: "application/pdf" });
           saveAs(pdfGen, "Resultado.pdf");
+          this.overlay = false;
         });
     },
 

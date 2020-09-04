@@ -113,7 +113,7 @@
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="primary" @click="change" text>I haven't account</v-btn>
+                      <v-btn color="primary" @click="change" text>Don't have an account?</v-btn>
 
                       <v-btn color="primary" type="submit">Log in</v-btn>
                     </v-card-actions>
@@ -179,7 +179,7 @@
                     </div>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="primary" @click="change" text>I've account</v-btn>
+                      <v-btn color="primary" @click="change" text>I have an account</v-btn>
 
                       <v-btn color="primary" type="submit">Sign UP</v-btn>
                     </v-card-actions>
@@ -241,7 +241,7 @@ export default {
             Cookie.set("auth", auth); // saving token in cookie for server rendering
             Cookie.set("id", id); // saving token in cookie for server rendering
             Cookie.set("role", role); // saving token in cookie for server rendering
-            this.$router.push("/gamificationExperience");
+            this.$router.push("/newComponent");
           })
           .catch((error) => {
             this.textSnackbar = "invalid credentials";
