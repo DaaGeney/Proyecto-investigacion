@@ -45,34 +45,59 @@ function createPDF(req, res) {
           line-height: 1.6;
         }
         
-        .rombo, .hexagono, .pentagono, .rectangle {
+        .rombo, .hexagono, .pentagono, .rectangle, .hexagonoOpc, .rectangleOpc {
           background-size:     100% 100%;                      /* <------ */
           background-repeat:   no-repeat;
           background-position: center center; 
-          min-height: 70px;
-          max-height: 200px;
-          min-width: 130px;
-          max-width: 170px;
+          min-height: 50px;
+          max-height: 150px;
+          min-width: 90px;
+          max-width: 120px;
           display: inline-block;
           text-align: center;
-          font-size: 15px;
+          font-size: 13px;
+          padding-top: 30px;
+          padding-bottom: 30px;
+          
+        }
+        .hexagonoOpc {
+          background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono-opc.png");
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+        .rectangleOpc {
+          background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo-opc.png") ;
+          padding-right: 15px;
+          padding-left: 15px;
+          padding-top: 17px;
+          padding-bottom: 17px;
         }
 
         .rectangle {
           background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png") ;
+          padding-right: 15px;
+          padding-left: 15px;
+          padding-top: 17px;
+          padding-bottom: 17px;
         }
 
         .pentagono {
           background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/pentagono.png") ;
+          padding-right: 15px;
+          padding-left: 15px;
         }
         
         .hexagono {
           background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png") ;
+          padding-right: 20px;
+          padding-left: 20px;
         }
 
         .rombo {
             background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rombo.png") ;
-        }
+            padding-right: 15px;
+            padding-left: 15px;
+          }
 
         .item1 {
           grid-area: header;
@@ -113,6 +138,7 @@ function createPDF(req, res) {
         <body>
         
         <h1>Gamification Experience: ${name}</h1>
+        
         <h3>Subject Matter: ${subjectMatter}</h3>
         <div class="b">
         <h3 >Description: </h3>
@@ -156,7 +182,7 @@ function createPDF(req, res) {
         {
           format: "Letter",
           border: {
-            top: "0.5in",
+            top: "0.4in",
             left:"0.5in",
             right:"0.4in",
             bottom: "0.5in",

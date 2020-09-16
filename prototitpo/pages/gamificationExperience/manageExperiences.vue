@@ -3,16 +3,112 @@
     <div ref="content">
       <v-card>
         <v-overlay v-model="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
+        <v-dialog v-model="dialog" max-width="700px">
+          <v-card>
+            <v-card-title class="headline">Experience details</v-card-title>
+            <v-card-text>
+              <div class="grid-container">
+                <div class="item1">
+                  Phase 1: Facilitation
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in facilitation"
+                    :key="x"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                </div>
+                <div class="item2">
+                  Phase 2: Core
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in core.gamification"
+                    :key="x"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in core.technological"
+                    :key="x"
+                    class="pentagono"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in core.traditional"
+                    :key="x"
+                    class="rectangle"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in core.web20"
+                    :key="x"
+                    class="hexagono"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                </div>
+
+                <div class="item3">
+                  Phase 3: evaluation
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in evaluation.gamification"
+                    :key="x"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in evaluation.technological"
+                    :key="x"
+                    class="pentagono"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in evaluation.traditional"
+                    :key="x"
+                    :class="classRect"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                  <div
+                    v-for="x in evaluation.web20"
+                    :key="x"
+                    :class="classHexa"
+                    v-on:click="redirectComponent(x)"
+                  >{{x}}</div>
+                </div>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="closeDialog()">Exit</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-card-title>
-          <div>
-            <v-breadcrumbs :items="items">
-              <template v-slot:divider>
-                <v-icon>mdi-forward</v-icon>
+          <v-col cols="12" sm="11">
+            <div>
+              <v-breadcrumbs :items="items">
+                <template v-slot:divider>
+                  <v-icon>mdi-forward</v-icon>
+                </template>
+              </v-breadcrumbs>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="1">
+            <v-tooltip v-model="showB" top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on" @click="$router.go(-1)">
+                  <v-icon>mdi-keyboard-backspace</v-icon>
+                </v-btn>
               </template>
-            </v-breadcrumbs>
-          </div>
+              <span>Back</span>
+            </v-tooltip>
+          </v-col>
           <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -22,6 +118,7 @@
           loading-text="Loading... Please wait"
           :search="search"
           sort-by="calories"
+          @click:row="showInfo"
           class="elevation-1"
         >
           <template v-slot:top>
@@ -60,6 +157,10 @@ export default {
   middleware: "authenticatedAdmin",
   data: () => ({
     config: "",
+    facilitation: [],
+    core: [],
+    evaluation: [],
+    showB: false,
     overlay: false,
     infoComponent: "",
     show: {
@@ -81,6 +182,8 @@ export default {
     },
     search: "",
     dialog: false,
+    classRect: "rectangle",
+    classHexa: "hexagono",
     items: [
       {
         text: "Index ",
@@ -122,10 +225,28 @@ export default {
       : undefined;
   },
   methods: {
+    showInfo(value) {
+      if (!this.overlay) {
+        this.facilitation = value.facilitation.gamification;
+        this.core = value.core;
+        this.evaluation = value.evaluation;
+        if (Array.isArray(this.core.traditional)) {
+          this.classRect = "rectangleReq";
+        }
+        if (Array.isArray(this.core.web20)) {
+          this.classHexa = "hexagonoReq";
+        }
+        this.dialog = true;
+        console.log(value);
+      }
+    },
+    redirectComponent(x) {
+      window.open(`/newComponent?info=${x}`);
+    },
     async generate(item) {
-      let htmlFacilitation = this.getHtml(item.facilitation);
-      let htmlCore = this.getHtml(item.core);
-      let htmlEval = this.getHtml(item.evaluation);
+      let htmlFacilitation = this.getHtml(item.facilitation, false, item);
+      let htmlCore = this.getHtml(item.core, false, item);
+      let htmlEval = this.getHtml(item.evaluation, true, item);
       this.overlay = true;
       const getInfo = (dataComponent) => {
         return new Promise((resolve) => {
@@ -248,7 +369,6 @@ export default {
           item.core.web20.map(async (e) => await getInfoWeb(e))
         );
         core += componentsCoreWeb.join();
-        
       }
       if (
         item.evaluation.traditional &&
@@ -275,9 +395,11 @@ export default {
         htmlFacilitation: htmlFacilitation,
         htmlCore: htmlCore,
         htmlEval: htmlEval,
-        infoComponentsFaciltiation: componentsFacilitation.join().replace(">,",">"),
-        infoComponentsCore: core.replace(">,",">"),
-        infoComponentsEval: evaluat.replace(">,",">"),
+        infoComponentsFaciltiation: componentsFacilitation
+          .join()
+          .replace(">,", ">"),
+        infoComponentsCore: core.replace(">,", ">"),
+        infoComponentsEval: evaluat.replace(">,", ">"),
       };
       retrievePDF(json)
         .then((res) => res.blob())
@@ -288,7 +410,7 @@ export default {
         });
     },
 
-    getHtml(array) {
+    getHtml(array, isFacilitation, item) {
       let html = ``;
       if (array.gamification) {
         array.gamification.forEach((element) => {
@@ -305,18 +427,50 @@ export default {
         });
       }
       if (array.web20) {
-        array.web20.forEach((element) => {
-          html += `<div class="hexagono"> 
+        if (isFacilitation) {
+          if (Array.isArray(item.core.web20)) {
+            array.web20.forEach((element) => {
+              html += `<div class="hexagono"> 
              <p> ${element}</p>
           </div>`;
-        });
+            });
+          } else {
+            array.web20.forEach((element) => {
+              html += `<div class="hexagonoOpc"> 
+             <p> ${element}</p>
+          </div>`;
+            });
+          }
+        }else{
+          array.web20.forEach((element) => {
+              html += `<div class="hexagonoOpc"> 
+             <p> ${element}</p>
+          </div>`;
+            });
+        }
       }
       if (array.traditional) {
-        array.traditional.forEach((element) => {
-          html += `<div class="rectangle"> 
+        if (isFacilitation) {
+          if (Array.isArray(item.core.traditional)) {
+            array.traditional.forEach((element) => {
+              html += `<div class="rectangle"> 
              <p> ${element}</p>
-          </div>`;
-        });
+            </div>`;
+            });
+          }else{
+            array.traditional.forEach((element) => {
+              html += `<div class="rectangleOpc"> 
+             <p> ${element}</p>
+            </div>`;
+            });
+          }
+        }else{
+          array.traditional.forEach((element) => {
+              html += `<div class="rectangleOpc"> 
+             <p> ${element}</p>
+            </div>`;
+            });
+        }
       }
       return html;
     },
@@ -341,16 +495,98 @@ export default {
       this.getData = false;
     },
 
-    editItem(item) {},
-
-    deleteItem(item) {
-      //   const index = this.desserts.indexOf(item);
-      //   confirm("Are you sure you want to delete this item?") &&
-      //     this.desserts.splice(index, 1);
-      //   deleteComponent(item.id).then(response => {
-      //     console.log("entro al delete");
-      //   });
+    closeDialog() {
+      this.facilitation = [];
+      this.core = [];
+      this.evaluation = [];
+      this.dialog = false;
     },
   },
 };
 </script>
+<style >
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header header header header header"
+    "main main main main main main"
+    "footer footer footer footer footer footer";
+  grid-gap: 5px;
+  background-color: #2196f3;
+  padding: 1px;
+  border: 1px solid #000;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px 45px;
+  font-size: 20px;
+}
+.item1 {
+  grid-area: header;
+}
+.item2 {
+  grid-area: main;
+}
+.item3 {
+  grid-area: footer;
+}
+.rombo,
+.hexagono,
+.pentagono,
+.rectangle,
+.rectangleReq,
+.hexagonoReq {
+  background-size: 100% 100%; /* <------ */
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 50px;
+  max-height: 150px;
+  min-width: 90px;
+  max-width: 120px;
+  display: inline-block;
+  text-align: center;
+  font-size: 13px;
+  padding-top: 30px;
+  position: relative;
+  padding-bottom: 30px;
+}
+
+.rectangle {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo-opc.png");
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+.rectangleReq {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rectangulo.png");
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+
+.pentagono {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/pentagono.png");
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.hexagono {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono-opc.png");
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.hexagonoReq {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png");
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.rombo {
+  background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/rombo.png");
+  padding-right: 15px;
+  padding-left: 15px;
+}
+</style>

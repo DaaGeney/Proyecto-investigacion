@@ -2,33 +2,11 @@
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
       <div class="text-center">
-        <logo />
-        <vuetify-logo />
+        
       </div>
       <h1>Grid Layout</h1>
 
-      <p>This grid layout contains six columns and three rows:</p>
-
-      <div class="grid-container">
-        <div class="item1">
-          <v-img src="/hexagono.png" width="180px">
-            <v-row align="center" class="pa-2 fill-height">
-              <v-col>
-                <div class="subheading" width="200px">sd sd sd sda</div>
-              </v-col>
-            </v-row>
-          </v-img>
-          <v-img src="/rectangulo.png" width="200px">
-            <v-row align="center" class="pa-2 fill-height">
-              <v-col>
-                <div class="subheading" width="200px">sd sd sd sda</div>
-              </v-col>
-            </v-row>
-          </v-img>
-        </div>
-        <div class="item2">Main</div>
-        <div class="item3">Footer</div>
-      </div>
+      
       <v-card>
         <v-card-title class="headline">Welcome to the Vuetify + Nuxt.js template</v-card-title>
         <v-card-text>
@@ -77,7 +55,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn color="primary" nuxt to="/inspire">Continue</v-btn>
-          <button @click="downloadWithCSS">Download PDF</button>
+       
         </v-card-actions>
       </v-card>
     </v-flex>
