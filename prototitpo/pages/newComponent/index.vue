@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <v-card>
-      <v-dialog v-model="dialog" width="600px">
+      <v-dialog v-model="dialog" persistent width="600px">
         <v-card>
           <v-card-title>
             <span class="headline">Info component</span>
@@ -51,7 +51,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog = false">Exit</v-btn>
+            <v-btn  v-if="!showInfo" color="primary" text @click="dialog = false">Exit</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -137,6 +137,7 @@ const Cookie = process.client ? require("js-cookie") : undefined;
 export default {
   middleware: "authenticatedAdmin",
   data: () => ({
+    showInfo:false,
     config: "",
     show: {
       name: "",
@@ -158,7 +159,7 @@ export default {
     },
     search: "",
     dialog: false,
-    obj:[],
+    obj: [],
     items: [
       {
         text: "Index ",
@@ -190,7 +191,7 @@ export default {
       headers: { authorization: Cookie.get("auth") },
     };
     this.initialize();
-    
+
   },
   methods: {
     initialize() {
@@ -212,8 +213,10 @@ export default {
             this.obj = this.desserts.find(
               (o) => o.name == this.$route.query.info
             );
+            // this.$router.replace({'query': null});
+            this.showInfo=true
             this.dialog = true;
-      this.show = this.obj;
+            this.show = this.obj;
           }
         })
         .catch((error) => {});

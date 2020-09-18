@@ -17,6 +17,7 @@
                   <div
                     v-for="x in facilitation"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
@@ -28,12 +29,14 @@
                   <div
                     v-for="x in core.gamification"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                   <div
                     v-for="x in core.technological"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     class="pentagono"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
@@ -41,12 +44,14 @@
                     v-for="x in core.traditional"
                     :key="x"
                     class="rectangle"
+                     v-bind:style="{cursor: 'pointer'}"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                   <div
                     v-for="x in core.web20"
                     :key="x"
                     class="hexagono"
+                     v-bind:style="{cursor: 'pointer'}"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                 </div>
@@ -58,24 +63,28 @@
                   <div
                     v-for="x in evaluation.gamification"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                   <div
                     v-for="x in evaluation.technological"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     class="pentagono"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                   <div
                     v-for="x in evaluation.traditional"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     :class="classRect"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
                   <div
                     v-for="x in evaluation.web20"
                     :key="x"
+                     v-bind:style="{cursor: 'pointer'}"
                     :class="classHexa"
                     v-on:click="redirectComponent(x)"
                   >{{x}}</div>
@@ -242,6 +251,7 @@ export default {
     },
     redirectComponent(x) {
       window.open(`/newComponent?info=${x}`);
+      //var myWindow = window.open("/", "", "width=200,height=100");
     },
     async generate(item) {
       let htmlFacilitation = this.getHtml(item.facilitation, false, item);

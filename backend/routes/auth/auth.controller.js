@@ -60,8 +60,6 @@ function createUser(req, res) {
 
 function logIn(req, res) {
   const { email, password } = req.body;
-  console.log(req.body);
-
   if (email && password) {
     let fun = (dataBase) =>
       dataBase.collection(collection).findOne(

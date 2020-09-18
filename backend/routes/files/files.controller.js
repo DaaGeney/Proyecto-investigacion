@@ -143,8 +143,9 @@ function createPDF(req, res) {
         <div class="b">
         <h3 >Description: </h3>
         <p >${description}</p>
-        </div>
         
+        </div>
+        <strong>*Components without borders are mandatories</strong>
         <div class="grid-container">
         
                 <div class="item1">
@@ -168,6 +169,10 @@ function createPDF(req, res) {
             </div>
                 
         </div>
+        <br>
+        
+        <strong>Convention:</strong>  
+       
         <br>
         <img src="https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/helper.png" alt="Error" width="400" height="150">
         <h2>Phase 1: Facilitation</h2>
