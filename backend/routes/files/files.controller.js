@@ -1,9 +1,9 @@
 var fs = require('fs');
-var {config} = require("../../config/index")
-
+var { config } = require("../../config/index")
+const archiver = require('archiver');
 function newFile(req, res) {
-  const { typeComponent,nameComponent } = req.params
-  
+  const { typeComponent, nameComponent } = req.params
+
   const base = `${config.folderBase}${typeComponent}/${nameComponent}`
   fs.mkdir(base, { recursive: true }, (err) => {
     if (err) throw err;
@@ -14,9 +14,59 @@ function newFile(req, res) {
       console.log('The file has been saved!');
     });
   });
-  
+}
 
+function getFile(req, res) {
+  const { typeComponent, nameComponent } = req.params
+  const base = `${config.folderBase}${typeComponent}`
+  fs.mkdir(`${base}/backups`, { recursive: true }, (err) => {
+    if (err) throw err;
+  });
+  createZip(base,nameComponent)
+  console.log(__dirname);
+  res.download(`${base}/backups/${nameComponent}.zip`)
 
+}
+function createZip(base,name) {
+  // create a file to stream archive data to.
+  const output = fs.createWriteStream(`${base}/backups/${name}.zip`);
+  const archive = archiver('zip', {
+    zlib: { level: 9 } // Sets the compression level.
+  });
+
+  // listen for all archive data to be written
+  // 'close' event is fired only when a file descriptor is involved
+  output.on('close', function () {
+    console.log(archive.pointer() + ' total bytes');
+    console.log('archiver has been finalized and the output file descriptor has closed.');
+  });
+
+  // This event is fired when the data source is drained no matter what was the data source.
+  // It is not part of this library but rather from the NodeJS Stream API.
+  // @see: https://nodejs.org/api/stream.html#stream_event_end
+  output.on('end', function () {
+    console.log('Data has been drained');
+  });
+
+  // good practice to catch warnings (ie stat failures and other non-blocking errors)
+  archive.on('warning', function (err) {
+    if (err.code === 'ENOENT') {
+      // log warning
+    } else {
+      // throw error
+      throw err;
+    }
+  });
+
+  // good practice to catch this error explicitly
+  archive.on('error', function (err) {
+    throw err;
+  });
+
+  // pipe archive data to the file
+  archive.pipe(output);
+  archive.directory(`${base}/${name}`, '/');
+  archive.finalize();
 }
 
 
@@ -25,7 +75,7 @@ const path = require("path");
 
 
 function createPDF(req, res) {
-  const {name,description,subjectMatter, htmlFacilitation,htmlCore,htmlEval,infoComponentsEval,infoComponentsFaciltiation,infoComponentsCore } = req.body
+  const { name, description, subjectMatter, htmlFacilitation, htmlCore, htmlEval, infoComponentsEval, infoComponentsFaciltiation, infoComponentsCore } = req.body
   if (true) {
     pdf
       .create(
@@ -188,8 +238,8 @@ function createPDF(req, res) {
           format: "Letter",
           border: {
             top: "0.4in",
-            left:"0.5in",
-            right:"0.4in",
+            left: "0.5in",
+            right: "0.4in",
             bottom: "0.5in",
           },
         }
@@ -210,7 +260,8 @@ function createPDF(req, res) {
 }
 module.exports = {
   newFile,
-  createPDF
+  createPDF,
+  getFile
 }
 
 

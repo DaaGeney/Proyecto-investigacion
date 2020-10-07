@@ -17,10 +17,12 @@
                   <div
                     v-for="x in facilitation"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                 </div>
                 <div class="item2">
                   Phase 2: Core
@@ -29,31 +31,39 @@
                   <div
                     v-for="x in core.gamification"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in core.technological"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     class="pentagono"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in core.traditional"
                     :key="x"
                     class="rectangle"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in core.web20"
                     :key="x"
                     class="hexagono"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                 </div>
 
                 <div class="item3">
@@ -63,31 +73,39 @@
                   <div
                     v-for="x in evaluation.gamification"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     class="rombo"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in evaluation.technological"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     class="pentagono"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in evaluation.traditional"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     :class="classRect"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                   <div
                     v-for="x in evaluation.web20"
                     :key="x"
-                     v-bind:style="{cursor: 'pointer'}"
+                    v-bind:style="{ cursor: 'pointer' }"
                     :class="classHexa"
                     v-on:click="redirectComponent(x)"
-                  >{{x}}</div>
+                  >
+                    {{ x }}
+                  </div>
                 </div>
               </div>
             </v-card-text>
@@ -97,6 +115,116 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+        <modal name="my-first-modal" draggable resizable scrollable height="auto">
+           <v-card>
+            <v-card-title class="headline">Experience details</v-card-title>
+            <v-card-text>
+              <div class="grid-container">
+                <div class="item1">
+                  Phase 1: Facilitation
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in facilitation"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                </div>
+                <div class="item2">
+                  Phase 2: Core
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in core.gamification"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in core.technological"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    class="pentagono"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in core.traditional"
+                    :key="x"
+                    class="rectangle"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in core.web20"
+                    :key="x"
+                    class="hexagono"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                </div>
+
+                <div class="item3">
+                  Phase 3: evaluation
+                  <br />
+                  <br />
+                  <div
+                    v-for="x in evaluation.gamification"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    class="rombo"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in evaluation.technological"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    class="pentagono"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in evaluation.traditional"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    :class="classRect"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                  <div
+                    v-for="x in evaluation.web20"
+                    :key="x"
+                    v-bind:style="{ cursor: 'pointer' }"
+                    :class="classHexa"
+                    v-on:click="redirectComponent(x)"
+                  >
+                    {{ x }}
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </modal>
         <v-card-title>
           <v-col cols="12" sm="11">
             <div>
@@ -145,7 +273,9 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="generate(item)">mdi-file-pdf</v-icon>
+            <v-icon small class="mr-2" @click="generate(item)"
+              >mdi-file-pdf</v-icon
+            >
             <!-- <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon> -->
           </template>
         </v-data-table>
@@ -235,7 +365,9 @@ export default {
   },
   methods: {
     showInfo(value) {
+
       if (!this.overlay) {
+       
         this.facilitation = value.facilitation.gamification;
         this.core = value.core;
         this.evaluation = value.evaluation;
@@ -245,8 +377,8 @@ export default {
         if (Array.isArray(this.core.web20)) {
           this.classHexa = "hexagonoReq";
         }
-        this.dialog = true;
-        console.log(value);
+        // this.dialog = true;
+         this.$modal.show("my-first-modal");
       }
     },
     redirectComponent(x) {
@@ -451,12 +583,12 @@ export default {
           </div>`;
             });
           }
-        }else{
+        } else {
           array.web20.forEach((element) => {
-              html += `<div class="hexagonoOpc"> 
+            html += `<div class="hexagonoOpc"> 
              <p> ${element}</p>
           </div>`;
-            });
+          });
         }
       }
       if (array.traditional) {
@@ -467,19 +599,19 @@ export default {
              <p> ${element}</p>
             </div>`;
             });
-          }else{
+          } else {
             array.traditional.forEach((element) => {
               html += `<div class="rectangleOpc"> 
              <p> ${element}</p>
             </div>`;
             });
           }
-        }else{
+        } else {
           array.traditional.forEach((element) => {
-              html += `<div class="rectangleOpc"> 
+            html += `<div class="rectangleOpc"> 
              <p> ${element}</p>
             </div>`;
-            });
+          });
         }
       }
       return html;

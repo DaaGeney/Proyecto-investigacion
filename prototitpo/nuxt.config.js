@@ -42,9 +42,7 @@ export default {
   ** Plugins to load before mounting the App
   ** https://nuxtjs.org/guide/plugins
   */
-  plugins: [
-    // { src: '@/plugins/vue-html2pdf', mode: 'client' }
-  ],
+  plugins: [{src:'~plugins/vue-js-modal.js'}],
   /*
   ** Auto import components
   ** See https://nuxtjs.org/api/configuration-components
@@ -52,7 +50,7 @@ export default {
   components: true,
   /*
   ** Nuxt.js dev-modules
-  */
+  */ 
   buildModules: [
     '@nuxtjs/vuetify',
   ],
@@ -104,4 +102,5 @@ export default {
   */
   build: {
   }
+  
 }
