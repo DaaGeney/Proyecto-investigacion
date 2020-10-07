@@ -7,46 +7,46 @@
             <span class="headline">Info component</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field v-model="show.name" label="Name" disabled></v-text-field>
-            <v-textarea v-model="show.info.description" label="Description" rows="1" disabled></v-textarea>
-            <v-text-field v-model="show.info.url" label="URL" disabled></v-text-field>
-            <v-text-field v-model="show.info.typeComponent" label="Type Component" disabled></v-text-field>
+            <v-text-field v-model="show.name" label="Name" readonly></v-text-field>
+            <v-textarea v-model="show.info.description" label="Description" rows="1" readonly></v-textarea>
+            <v-text-field v-model="show.info.url" label="URL" readonly></v-text-field>
+            <v-text-field v-model="show.info.typeComponent" label="Type Component" readonly></v-text-field>
             <v-text-field
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.studentsTeam"
               label="Students per Team"
-              disabled
+              readonly
             ></v-text-field>
             <v-textarea
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.length"
               label="Length"
-              disabled
+              readonly
               rows="1"
             ></v-textarea>
             <v-text-field
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.space"
               label="Space"
-              disabled
+              readonly
             ></v-text-field>
             <v-text-field
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.materials"
               label="Materials"
-              disabled
+              readonly
             ></v-text-field>
             <v-text-field
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.subjectMatter"
               label="Subject Matter"
-              disabled
+              readonly
             ></v-text-field>
             <v-text-field
               v-if="show.info.typeComponent=='Gamification'"
               v-model="show.info.purpose"
               label="Purpose"
-              disabled
+              readonly
             ></v-text-field>
           </v-card-text>
           <v-card-actions>

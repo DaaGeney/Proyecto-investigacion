@@ -116,8 +116,14 @@
           </v-card>
         </v-dialog>
 
-        <modal name="my-first-modal" draggable resizable scrollable height="auto">
-           <v-card>
+        <modal
+          name="my-first-modal"
+          draggable
+          resizable
+          scrollable
+          height="auto"
+        >
+          <v-card>
             <v-card-title class="headline">Experience details</v-card-title>
             <v-card-text>
               <div class="grid-container">
@@ -223,6 +229,73 @@
             <v-card-actions>
               <v-spacer></v-spacer>
             </v-card-actions>
+          </v-card>
+        </modal>
+        <modal name="my-modal" draggable resizable scrollable height="auto">
+          <v-card>
+            <v-card-title>
+              <span class="headline">Info component</span>
+            </v-card-title>
+            <v-card-text>
+              <v-text-field
+                v-model="show.name"
+                label="Name"
+                readonly
+              ></v-text-field>
+              <v-textarea
+                v-model="show.info.description"
+                label="Description"
+                rows="1"
+                readonly
+              ></v-textarea>
+              <v-text-field
+                v-model="show.info.url"
+                label="URL"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                v-model="show.info.typeComponent"
+                label="Type Component"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.studentsTeam"
+                label="Students per Team"
+                readonly
+              ></v-text-field>
+              <v-textarea
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.length"
+                label="Length"
+                readonly
+                rows="1"
+              ></v-textarea>
+              <v-text-field
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.space"
+                label="Space"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.materials"
+                label="Materials"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.subjectMatter"
+                label="Subject Matter"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                v-if="show.info.typeComponent == 'Gamification'"
+                v-model="show.info.purpose"
+                label="Purpose"
+                readonly
+              ></v-text-field>
+            </v-card-text>
           </v-card>
         </modal>
         <v-card-title>
@@ -353,6 +426,23 @@ export default {
     ],
     desserts: [],
     getData: true,
+    show: {
+      name: "",
+      info: {
+        description: "",
+        typeComponent: "",
+        url: "",
+        instructorsInstructions: "",
+        learningObjetive: "",
+        length: "",
+        materials: "",
+        purpose: "",
+        space: "",
+        studentsInstructions: "",
+        studentsTeam: "",
+        subjectMatter: "",
+      },
+    },
   }),
   mounted() {
     this.config = {
@@ -365,9 +455,7 @@ export default {
   },
   methods: {
     showInfo(value) {
-
       if (!this.overlay) {
-       
         this.facilitation = value.facilitation.gamification;
         this.core = value.core;
         this.evaluation = value.evaluation;
@@ -378,12 +466,19 @@ export default {
           this.classHexa = "hexagonoReq";
         }
         // this.dialog = true;
-         this.$modal.show("my-first-modal");
+        this.$modal.show("my-first-modal");
       }
     },
     redirectComponent(x) {
-      window.open(`/newComponent?info=${x}`);
-      //var myWindow = window.open("/", "", "width=200,height=100");
+      this.$modal.show("my-modal");
+      getComponent(x, this.config).then((response) => {
+        this.show = {
+          name: response.data.data.name,
+          info: response.data.data.info,
+        };
+        console.log(this.show);
+      });
+      //window.open(`/newComponent?info=${x}`);
     },
     async generate(item) {
       let htmlFacilitation = this.getHtml(item.facilitation, false, item);
