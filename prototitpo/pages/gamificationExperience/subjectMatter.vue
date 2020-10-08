@@ -28,18 +28,18 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-subheader class="title">{{this.$route.query.action}} Define Subject Matter</v-subheader>
+          <v-subheader class="title">{{this.$route.query.action}} {{ $t('subject.title') }}</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" counter v-model="topic" label="Topic" required></v-text-field>
-            <v-text-field :rules="rules" counter v-model="subject" label="Subject" required></v-text-field>
-            <v-text-field :rules="rules" counter v-model="level" label="Level" required></v-text-field>
-            <v-text-field :rules="rules" counter v-model="program" label="Program" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="topic"  v-bind:label="$t('subject.t1')" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="subject" v-bind:label="$t('subject.t2')" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="level" v-bind:label="$t('subject.t3')" required></v-text-field>
+            <v-text-field :rules="rules" counter v-model="program" v-bind:label="$t('subject.t4')" required></v-text-field>
           </v-col>
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text to="/gamificationExperience">Cancel</v-btn>
-          <v-btn color="blue darken-1" type="submit">Save</v-btn>
+          <v-btn color="blue darken-1" text to="/gamificationExperience">{{$t('cancel')}}</v-btn>
+          <v-btn color="blue darken-1" type="submit">{{$t('save')}}</v-btn>
         </v-card-actions>
       </v-container>
     </v-form>
@@ -66,18 +66,18 @@ export default {
       rules: [v => !!v || "it's necessary"],
       items: [
         {
-          text: "Index ",
+          text: this.$t('subject.route'),
           disabled: false,
           to: "/"
         },
         {
-          text: "Gamification Experience",
+           text: this.$t('subject.route2'),
           disabled: true,
           href: "/gamificationExperience/"
         },
 
         {
-          text: `Define Subject Matter`,
+          text: this.$t('subject.title'),
           disabled: true,
           to: "/"
         }

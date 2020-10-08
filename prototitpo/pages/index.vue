@@ -4,7 +4,7 @@
       <div class="text-center">
         
       </div>
-      <h1>Grid Layout</h1>
+      <h1>{{ $t('title') }}</h1>
 
       
       <v-card>

@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item v-for="(item, i) in items" color="primary" :key="i" :to="item.to" router exact>
+        <v-list-item v-for="(item, i) in items" color="primary" :key="i" :to="localePath(item.to)" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -10,6 +10,7 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        
       
       <v-list-group
         prepend-icon="mdi-view-list"
@@ -52,6 +53,11 @@
         </v-btn>
       </v-row>
       <v-spacer />
+      <div>
+    <!-- <h1>Lang navigation</h1>
+      <nuxt-link :to="switchLocalePath('es')">espa</nuxt-link>
+      <nuxt-link :to="switchLocalePath('en')">English</nuxt-link> -->
+  </div>
 
       <v-btn icon @click="logout">
         <v-icon>mdi-logout</v-icon>
@@ -88,7 +94,7 @@ export default {
       
       miniVariant: false,
       rightDrawer: false,
-      title: "Methodological Gamification",
+      title: this.$t('title'),
       searchInput: null,
     };
   },
@@ -107,8 +113,8 @@ export default {
             },
             {
               icon: "mdi-file-document-edit-outline",
-              title: "Manage components",
-              to: "/newComponent/",
+              title: this.$t('manageComponents'),
+              to: '/newComponent/',
             },
             
           ];
@@ -116,8 +122,8 @@ export default {
           this.items = [
             {
               icon: "mdi-file-document-edit-outline",
-              title: "Manage components",
-              to: "/newComponent/",
+              title:  this.$t('manageComponents'),
+              to: '/newComponent/',
             },
             
           ];

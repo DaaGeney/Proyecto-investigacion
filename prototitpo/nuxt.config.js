@@ -67,7 +67,75 @@ export default {
    
       // With options
       ['cookie-universal-nuxt', { alias: 'cookiz' }],
-      ['nuxt-material-design-icons']
+      ['nuxt-material-design-icons'],
+      [
+        'nuxt-i18n',
+        {
+          locales: ['en', 'es'],
+          defaultLocale: 'en',
+          vueI18n: {
+            fallbackLocale: 'en',
+            messages: {
+              en: {
+                save:'Save',
+                cancel:'Cancel',
+                searchE:'Search experience...',
+                title: 'Methodological Gamification',
+                manageComponents:'Manage Components',
+                components:{
+                  newComponent: 'Create Component',
+                  type1:'Gamification Component',
+                  type2:'Traditional Component',
+                  type3:'Web 2.0 Component',
+                  type4:'Technological Component',
+                  subTitle: 'Components',
+                  index:'Search',
+                  nam:'Name',
+                  type:'Type Component',
+                  action:'Actions'
+                },
+                subject:{
+                  title:'Define Subject Matter',
+                  route:'Index',
+                  route2:'Gamification Experience',
+                  t1:'Topic',
+                  t2:'Subject',
+                  t3:'Level',
+                  t4:'Program'
+                }
+              },
+              es: {
+                save:'Aceptar',
+                cancel:'Cancelar',
+                searchE:'Buscar experiencia...',
+                title: 'Metodologias Gamificacion',
+                manageComponents:'Gestionar Componentes',
+                components:{
+                  newComponent: 'Crear Componente',
+                  type1:'Gamificación',
+                  type2:'Tradicional',
+                  type3:'Web 2.0 ',
+                  type4:'Tecnológico',
+                  subTitle: 'Componentes',
+                  index:'Buscar',
+                  nam:'Nombre',
+                  type:'Tipo Componente',
+                  action:'Acciones'
+                },
+                subject:{
+                  title:'Definir tema',
+                  route:'Inicio',
+                  route2:'Experiencia de Gamificacion',
+                  t1:'Tema',
+                  t2:'Asunto',
+                  t3:'Nivel',
+                  t4:'Programa'
+                }
+              }
+            }
+          }
+        }
+      ]
    ],
   
   /*

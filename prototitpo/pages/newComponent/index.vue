@@ -67,7 +67,7 @@
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search "
+          v-bind:label="$t('components.index')"
           single-line
           hide-details
         ></v-text-field>
@@ -83,36 +83,36 @@
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Components</v-toolbar-title>
+            <v-toolbar-title>{{$t('components.subTitle')}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
             <v-menu bottom origin="center center" transition="scale-transition">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on">Create Component</v-btn>
+                <v-btn color="primary" dark v-bind="attrs" v-on="on">{{$t('components.newComponent')}}</v-btn>
               </template>
 
               <v-list>
                 <v-list-item to="/newComponent/GamificationComponent?action=Create">
-                  <v-list-item-title>Gamification Component</v-list-item-title>
+                  <v-list-item-title>{{$t('components.type1')}}</v-list-item-title>
                 </v-list-item>
               </v-list>
               <v-list>
                 <v-list-item to="/newComponent/traditionalComponent?action=Create">
-                  <v-list-item-title>Traditional Component</v-list-item-title>
+                  <v-list-item-title>{{$t('components.type2')}}</v-list-item-title>
                 </v-list-item>
               </v-list>
               <v-list>
                 <v-list-item
                   to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create"
                 >
-                  <v-list-item-title>Web 2.0 Component</v-list-item-title>
+                  <v-list-item-title>{{$t('components.type3')}}</v-list-item-title>
                 </v-list-item>
               </v-list>
               <v-list>
                 <v-list-item
                   to="/newComponent/additionalComponent?typeComponent=Technological&action=Create"
                 >
-                  <v-list-item-title>Technological Component</v-list-item-title>
+                  <v-list-item-title>{{$t('components.type4')}}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>

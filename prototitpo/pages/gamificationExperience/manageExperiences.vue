@@ -363,7 +363,7 @@ const Cookie = process.client ? require("js-cookie") : undefined;
 import { getExperiences } from "../../helpers/apiCalls/experience";
 import { retrievePDF } from "../../helpers/apiCalls/file";
 import { getComponent } from "../../helpers/apiCalls/component";
-
+import { url } from "../../config";
 import { saveAs } from "file-saver";
 export default {
   middleware: "authenticatedAdmin",
@@ -505,6 +505,7 @@ export default {
               <strong>Students Per Team: </strong>${response.data.data.info.studentsTeam} <br>
               <strong>subject Matter:</strong> ${response.data.data.info.subjectMatter} <br>
              <strong> Url: </strong>${response.data.data.info.url} <br>
+             <strong> Download files: </strong>${url}/file/${response.data.data.info.typeComponent}/${dataComponent} <br>
               </p>
             </div>
             <br>`);
