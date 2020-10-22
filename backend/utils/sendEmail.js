@@ -15,7 +15,7 @@ const mailDetails = (email, token) => {
         from: 'notifications@udem.edu.co',
         to: email,
         subject: 'Password recovery',
-        text: `To recover your password click here: http://gamification-methodological.herokuapp.com/restorePassword?token=${token}&user=${email}`
+        text: `Reset your password here: http://gamification-methodological.herokuapp.com/restorePassword?token=${token}&user=${email}`
     }
     mailTransporter.sendMail(info)
 };
