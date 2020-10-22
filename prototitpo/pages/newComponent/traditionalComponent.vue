@@ -22,15 +22,15 @@
                   <v-icon>mdi-keyboard-backspace</v-icon>
                 </v-btn>
               </template>
-              <span>Back</span>
+              <span>{{$t('back')}}</span>
             </v-tooltip>
           </v-col>
         </v-row>
         <v-row>
-          <v-subheader class="title">{{this.$route.query.action}} traditional Component</v-subheader>
+          <v-subheader class="title">{{this.$route.query.action}} {{this.$t('components.traditionalComponent')}}</v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="name" label="Name" counter ></v-text-field>
-            <v-textarea :rules="rules" v-model="description" counter label="Description" rows="1"></v-textarea>
+            <v-text-field :rules="rules" v-model="name" v-bind:label="$t('components.name')" :readonly="read" counter ></v-text-field>
+            <v-textarea :rules="rules" v-model="description" counter v-bind:label="$t('components.description')" rows="1"></v-textarea>
             <v-text-field :rules="rules" v-model="url" label="URL" counter required ></v-text-field>
 
             <v-file-input
@@ -40,14 +40,14 @@
               counter
               :show-size="1000"
               multiple
-              label="Attached files"
+              v-bind:label="$t('components.file')"
             ></v-file-input>
           </v-col>
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
-          <v-btn color="blue darken-1" type="submit">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="reset">{{$t('cancel')}}</v-btn>
+          <v-btn color="blue darken-1" type="submit">{{$t('save')}}</v-btn>
         </v-card-actions>
       </v-container>
     </v-form>
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       config:"",
+      read:false,
       show:false,
       loading: false,
       snackbarSuccess: false,
@@ -79,17 +80,17 @@ export default {
       action: "",
       items: [
         {
-          text: "Index ",
+          text: this.$t('subject.route'),
           disabled: false,
           to: "/"
         },
         {
-          text: "Manage Components",
+          text: this.$t('components.manageComponents'),
           disabled: false,
           to: "/NewComponent"
         },
         {
-          text: `${this.$route.query.action} Traditional Component`,
+          text: `${this.$route.query.action} ${this.$t('components.traditionalComponent')}`,
           disabled: true,
           to: "/NewComponent/traditionalComponent"
         }
@@ -103,6 +104,7 @@ export default {
     };
     this.action = this.$route.query.action;
     if (this.action == "Update") {
+      this.read=true
       getComponent(this.$route.query.name,this.config).then(response => {
         console.log(response.data.data);
         this.name = response.data.data.name;

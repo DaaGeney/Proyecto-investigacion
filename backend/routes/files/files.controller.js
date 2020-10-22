@@ -89,6 +89,7 @@ function createPDF(req, res) {
         html {
           font-family: 'Open Sans', sans-serif;
           text-align: justify;
+          font-size: 12px;
         }
 
         div.b {
@@ -100,14 +101,14 @@ function createPDF(req, res) {
           background-repeat:   no-repeat;
           background-position: center center; 
           min-height: 50px;
-          max-height: 150px;
-          min-width: 90px;
-          max-width: 120px;
+          max-height: 100px;
+          min-width: 70px;
+          max-width: 100px;
           display: inline-block;
           text-align: center;
-          font-size: 13px;
-          padding-top: 30px;
-          padding-bottom: 30px;
+          font-size: 11px;
+          padding-top: 20px;
+          padding-bottom: 20px;
           
         }
         .hexagonoOpc {
@@ -139,8 +140,8 @@ function createPDF(req, res) {
         
         .hexagono {
           background-image: url("https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/hexagono.png") ;
-          padding-right: 20px;
-          padding-left: 20px;
+          padding-right: 15px;
+          padding-left: 15px;
         }
 
         .rombo {
@@ -180,7 +181,7 @@ function createPDF(req, res) {
         .grid-container > div {
           background-color: rgba(255, 255, 255, 0.8);
           padding: 20px 45px;
-          font-size: 20px;
+          font-size: 14px;
         }
        
         </style>
@@ -224,7 +225,7 @@ function createPDF(req, res) {
         <strong>Convention:</strong>  
        
         <br>
-        <img src="https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/helper.png" alt="Error" width="400" height="150">
+        <img src="https://raw.githubusercontent.com/DaaGeney/Proyecto-investigacion/master/backend/static/helper.png" alt="Error" width="370" height="120">
         <h2>Phase 1: Facilitation</h2>
         ${infoComponentsFaciltiation}
         <h2>Phase 2: Core</h2>

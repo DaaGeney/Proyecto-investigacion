@@ -316,7 +316,7 @@
                   <v-icon>mdi-keyboard-backspace</v-icon>
                 </v-btn>
               </template>
-              <span>Back</span>
+               <span>{{ $t("back") }}</span>
             </v-tooltip>
           </v-col>
           <v-spacer></v-spacer>
@@ -333,13 +333,14 @@
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
-              <v-toolbar-title>Experiences</v-toolbar-title>
+              <v-toolbar-title>{{$t('experience.check')}}</v-toolbar-title>
               <v-spacer />
 
               <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Search experience"
+                v-bind:label="$t('searchE')"
+                
                 single-line
                 hide-details
               ></v-text-field>

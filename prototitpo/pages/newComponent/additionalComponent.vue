@@ -1,8 +1,18 @@
 <template>
   <v-card flat>
-    <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{ textSnackbar }}</v-snackbar>
-    <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{ textSnackbar }}</v-snackbar>
-    <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
+    <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{
+      textSnackbar
+    }}</v-snackbar>
+    <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{
+      textSnackbar
+    }}</v-snackbar>
+    <v-progress-linear
+      :active="loading"
+      :indeterminate="loading"
+      absolute
+      bottom
+      color="primary"
+    ></v-progress-linear>
     <v-form ref="form" v-on:submit.prevent="createGamification" lazy-validation>
       <v-container>
         <v-row>
@@ -22,24 +32,46 @@
                   <v-icon>mdi-keyboard-backspace</v-icon>
                 </v-btn>
               </template>
-              <span>Back</span>
+              <span>{{ $t("back") }}</span>
             </v-tooltip>
           </v-col>
         </v-row>
         <v-row>
-          <v-subheader
-            class="title"
-          >{{this.$route.query.action}} {{this.$route.query.typeComponent}} Component</v-subheader>
+          <v-subheader class="title"
+            >{{ this.$route.query.action }}
+            {{ this.$route.query.typeComponent }}
+          </v-subheader>
           <v-col cols="12">
-            <v-text-field :rules="rules" v-model="name" label="Name" counter required></v-text-field>
-            <v-textarea :rules="rules" v-model="description" label="Description" counter rows="1"></v-textarea>
-            <v-text-field :rules="rules" v-model="url" label="URL" counter required></v-text-field>
+            <v-text-field
+              :rules="rules"
+              v-model="name"
+              v-bind:label="$t('components.name')"
+              counter
+              :readonly="read"
+              required
+            ></v-text-field>
+            <v-textarea
+              :rules="rules"
+              v-model="description"
+              v-bind:label="$t('components.description')"
+              counter
+              rows="1"
+            ></v-textarea>
+            <v-text-field
+              :rules="rules"
+              v-model="url"
+              label="URL"
+              counter
+              required
+            ></v-text-field>
           </v-col>
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="reset">Cancel</v-btn>
-          <v-btn color="blue darken-1" type="submit">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="reset">{{
+            $t("cancel")
+          }}</v-btn>
+          <v-btn color="blue darken-1" type="submit">{{ $t("save") }}</v-btn>
         </v-card-actions>
       </v-container>
     </v-form>
@@ -57,7 +89,8 @@ export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
-      config:"",
+      read: false,
+      config: "",
       show: false,
       loading: false,
       snackbarSuccess: false,
@@ -71,17 +104,17 @@ export default {
       action: "",
       items: [
         {
-          text: "Index ",
+          text: this.$t("subject.route"),
           disabled: false,
           to: "/",
         },
         {
-          text: "Manage Components",
+          text: this.$t("components.manageComponents"),
           disabled: false,
           to: "/NewComponent",
         },
         {
-          text: `${this.$route.query.action} ${this.$route.query.typeComponent} Component`,
+          text: `${this.$route.query.action} ${this.$route.query.typeComponent} `,
           disabled: true,
           to: "/NewComponent/additionalComponent",
         },
@@ -90,16 +123,15 @@ export default {
   },
   mounted() {
     this.config = {
-      headers: { authorization: Cookie.get("auth") }
+      headers: { authorization: Cookie.get("auth") },
     };
     this.action = this.$route.query.action;
     if (this.action == "Update") {
-      console.log("datos traido", this.$route.query.name);
-      getComponent(this.$route.query.name,this.config).then((response) => {
+      this.read = true;
+      getComponent(this.$route.query.name, this.config).then((response) => {
         this.name = response.data.data.name;
         this.description = response.data.data.info.description;
         this.url = response.data.data.info.url;
-        console.log("datos traido", response);
       });
     }
   },
@@ -117,14 +149,16 @@ export default {
           },
         };
         if (this.action == "Update") {
-          updateComponent(this.$route.query.name, info,this.config).then((then) => {
-            this.$refs.form.reset();
-            this.textSnackbar = "Updated successfully";
-            this.snackbarSuccess = true;
-            this.loading = false;
-          });
+          updateComponent(this.$route.query.name, info, this.config).then(
+            (then) => {
+              this.$refs.form.reset();
+              this.textSnackbar = "Updated successfully";
+              this.snackbarSuccess = true;
+              this.loading = false;
+            }
+          );
         } else {
-          createComponent(info,this.config)
+          createComponent(info, this.config)
             .then((response) => {
               this.$refs.form.reset();
               this.textSnackbar = "Created successfully";
@@ -132,8 +166,6 @@ export default {
               this.loading = false;
             })
             .catch((error) => {
-              console.log(info,"info");
-              console.log(error);
               this.textSnackbar = "This component already exists";
               this.snackbar = true;
               this.loading = false;

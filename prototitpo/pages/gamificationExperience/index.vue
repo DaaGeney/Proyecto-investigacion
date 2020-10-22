@@ -12,7 +12,8 @@
       <v-btn
         text
         color="primary"
-        to="/gamificationExperience/subjectMatter"
+        :to='localePath("/gamificationExperience/subjectMatter")'
+      
       >Define subject Matter...</v-btn>
     </v-row>
     <v-row>

@@ -1,8 +1,21 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
+    <v-navigation-drawer
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      fixed
+      app
+    >
       <v-list>
-        <v-list-item v-for="(item, i) in items" color="primary" :key="i" :to="localePath(item.to)" router exact>
+        <v-list-item
+          v-for="(item, i) in items"
+          color="primary"
+          :key="i"
+          :to="localePath(item.to)"
+          router
+          exact
+        >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -10,21 +23,15 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-        
-      
-      <v-list-group
-        prepend-icon="mdi-view-list"
-        value="false"
-        no-action
-      >
-        <template v-slot:activator>
-          <v-list-item-title>Gamification experiences</v-list-item-title>
-        </template> 
+
+        <v-list-group prepend-icon="mdi-view-list" value="false" no-action>
+          <template v-slot:activator>
+            <v-list-item-title>{{ $t("subject.route2") }}</v-list-item-title>
+          </template>
           <v-list-item
             v-for="(admin, i) in admins"
             :key="i"
-             
-            :to="admin[2]"
+            :to="localePath(admin[2])"
           >
             <v-list-item-title v-text="admin[0]"></v-list-item-title>
             <v-list-item-icon>
@@ -32,18 +39,15 @@
             </v-list-item-icon>
           </v-list-item>
         </v-list-group>
-
-        
-    </v-list>
-     
+      </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title> {{$t('title')}}</v-toolbar-title>
       <v-spacer />
       <v-row align="center" style="max-width: 650px">
         <v-text-field
-          placeholder="Search experience..."
+          v-bind:placeholder="$t('searchE')"
           single-line
           v-model="searchInput"
           hide-details
@@ -54,10 +58,34 @@
       </v-row>
       <v-spacer />
       <div>
-    <!-- <h1>Lang navigation</h1>
-      <nuxt-link :to="switchLocalePath('es')">espa</nuxt-link>
-      <nuxt-link :to="switchLocalePath('en')">English</nuxt-link> -->
-  </div>
+        <v-menu bottom origin="center center" transition="scale-transition">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text color="primary" dark v-bind="attrs" v-on="on">{{
+              $t("lang")
+            }}</v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item>
+              <v-list-item-title
+                ><nuxt-link  :to="switchLocalePath('en')"
+                
+                  >English</nuxt-link
+                ></v-list-item-title
+              >
+            </v-list-item>
+          </v-list>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title
+                ><nuxt-link :to="switchLocalePath('es')"
+                  >Español</nuxt-link
+                ></v-list-item-title
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
 
       <v-btn icon @click="logout">
         <v-icon>mdi-logout</v-icon>
@@ -87,14 +115,25 @@ export default {
       fixed: false,
       items: [],
       admins: [
-        ['Subject matter', 'mdi-plus-circle-outline','/gamificationExperience/subjectMatter'],
-        ['Define experience', 'mdi-plus-circle-outline','/gamificationExperience/defineExperience'],
-        ['Check experiences', 'mdi-eye','/gamificationExperience/manageExperiences'],
+        [
+          this.$t("components.subject"),
+          "mdi-plus-circle-outline",
+          "/gamificationExperience/subjectMatter",
+        ],
+        [
+          this.$t("experience.title"),
+          "mdi-plus-circle-outline",
+          "/gamificationExperience/defineExperience",
+        ],
+        [
+          this.$t("experience.check"),
+          "mdi-eye",
+          "/gamificationExperience/manageExperiences",
+        ],
       ],
-      
+
       miniVariant: false,
       rightDrawer: false,
-      title: this.$t('title'),
       searchInput: null,
     };
   },
@@ -109,23 +148,21 @@ export default {
             {
               icon: "mdi-file-document-edit-outline",
               title: "Manage users",
-              to: "/manageUser/",
+              to: this.localePath("/manageUser/"),
             },
             {
               icon: "mdi-file-document-edit-outline",
-              title: this.$t('manageComponents'),
-              to: '/newComponent/',
+              title: this.$t("manageComponents"),
+              to: "/newComponent/",
             },
-            
           ];
         } else {
           this.items = [
             {
               icon: "mdi-file-document-edit-outline",
-              title:  this.$t('manageComponents'),
-              to: '/newComponent/',
+              title: this.$t("manageComponents"),
+              to: "/newComponent/",
             },
-            
           ];
         }
       })
@@ -142,6 +179,10 @@ export default {
       Cookie.remove("id");
       Cookie.remove("role");
       this.$router.replace("/login");
+    },
+    recharge(code){
+      switchLocalePath('en')
+    this.$router.replace("/");
     },
     search() {
       if (this.searchInput) {

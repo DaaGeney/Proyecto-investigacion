@@ -1,9 +1,23 @@
 <template>
   <v-form ref="form" v-on:submit.prevent="createNewExperience" lazy-validation>
     <v-stepper v-model="e1" non-linear>
-      <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{ textSnackbar }}</v-snackbar>
-      <v-snackbar v-model="snackbarSuccess" top color="success" :timeout="2500">{{ textSnackbar }}</v-snackbar>
-      <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom color="primary"></v-progress-linear>
+      <v-snackbar v-model="snackbar" top color="error" :timeout="3000">{{
+        textSnackbar
+      }}</v-snackbar>
+      <v-snackbar
+        v-model="snackbarSuccess"
+        top
+        color="success"
+        :timeout="2500"
+        >{{ textSnackbar }}</v-snackbar
+      >
+      <v-progress-linear
+        :active="loading"
+        :indeterminate="loading"
+        absolute
+        bottom
+        color="primary"
+      ></v-progress-linear>
       <v-row>
         <v-col cols="12" sm="11">
           <div>
@@ -21,37 +35,47 @@
                 <v-icon>mdi-keyboard-backspace</v-icon>
               </v-btn>
             </template>
-            <span>Back</span>
+            <span>{{ $t("back") }}</span>
           </v-tooltip>
         </v-col>
       </v-row>
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1">Configuration</v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1"
+          >{{$t('experience.configuration')}}</v-stepper-step
+        >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 2" step="2">Facilitation</v-stepper-step>
+        <v-stepper-step :complete="e1 > 2" step="2"
+          >{{$t('experience.facilitation')}}</v-stepper-step
+        >
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 3" step="3">Core</v-stepper-step>
+        <v-stepper-step :complete="e1 > 3" step="3">{{$t('experience.core')}}</v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="4">Evaluation</v-stepper-step>
+        <v-stepper-step step="4">{{$t('experience.evaluation')}}</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-card class="mb-12" flat>
-            <v-subheader class="title">Information</v-subheader>
+            <v-subheader class="title">{{$t('experience.information')}}</v-subheader>
             <v-col>
-              <v-text-field :rules="rulesText" counter label="Name" v-model="name" required></v-text-field>
+              <v-text-field
+                :rules="rulesText"
+                counter
+                v-bind:label="$t('components.name')"
+                v-model="name"
+                required
+              ></v-text-field>
               <v-textarea
                 :rules="rulesText"
                 v-model="description"
                 counter
-                label="Description"
+                v-bind:label="$t('components.description')"
                 rows="1"
                 required
               ></v-textarea>
@@ -60,25 +84,25 @@
                 :items="listSubject"
                 :rules="rulesText"
                 dense
-                label="Subject Matter"
+                v-bind:label="$t('components.subject')"
                 required
               ></v-autocomplete>
             </v-col>
           </v-card>
 
-          <v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+          <v-btn color="primary" @click="e1 = 2">{{$t('continue')}}</v-btn>
 
-          <v-btn text to="/gamificationExperience">Cancel</v-btn>
+          <v-btn text :to='localePath("/gamificationExperience")'>{{$t('cancel')}}</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
           <v-card class="mb-12" flat>
-            <v-subheader class="title">Mandatory items</v-subheader>
+            <v-subheader class="title">{{$t('experience.mandatory')}}</v-subheader>
             <v-row>
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listGamification"
                   dense
-                  label="Gamification Component"
+                  v-bind:label="$t('components.type1')"
                   v-model="data.facilitation.gamification"
                   required
                   :rules="rules"
@@ -92,26 +116,27 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/GamificationComponent?action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/GamificationComponent?action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
           </v-card>
 
-          <v-btn color="primary" @click="e1 = 3">Continue</v-btn>
+          <v-btn color="primary" @click="e1 = 3">{{$t('continue')}}</v-btn>
 
-          <v-btn text @click="e1 = 1">Back</v-btn>
+          <v-btn text @click="e1 = 1">{{$t('back')}}</v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="3">
           <v-card class="mb-12" flat>
-            <v-subheader class="title">Mandatory items</v-subheader>
+            <v-subheader class="title">{{$t('experience.mandatory')}}</v-subheader>
             <v-row>
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listGamification"
                   dense
-                  label="Gamification Component"
+                  v-bind:label="$t('components.type1')"
                   v-model="data.core.gamification"
                   required
                   :rules="rules"
@@ -125,8 +150,9 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/GamificationComponent?action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/GamificationComponent?action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row>
@@ -134,7 +160,7 @@
                 <v-autocomplete
                   :items="listTechnological"
                   dense
-                  label="Technological Component"
+                  v-bind:label="$t('components.type4')"
                   v-model="data.core.technological"
                   required
                   :rules="rules"
@@ -148,17 +174,18 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/additionalComponent?typeComponent=Technological&action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/additionalComponent?typeComponent=Technological&action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
-            <v-subheader class="title">Optional items</v-subheader>
+            <v-subheader class="title">{{$t('experience.optional')}}</v-subheader>
             <v-row>
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listWeb"
                   dense
-                  label="Web 2.0 Component"
+                  v-bind:label="$t('components.type3')"
                   v-model="data.core.web20"
                   multiple
                   chips
@@ -169,8 +196,9 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/additionalComponent?typeComponent=Web2.0&action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row>
@@ -178,7 +206,7 @@
                 <v-autocomplete
                   :items="listTraditional"
                   dense
-                  label="Traditional Component"
+                  v-bind:label="$t('components.type2')"
                   v-model="data.core.traditional"
                   multiple
                   chips
@@ -189,24 +217,26 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/traditionalComponent?action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/traditionalComponent?action=Create")'
+
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
           </v-card>
-          <v-btn color="primary" @click="verifyEvaluation">Continue</v-btn>
-          <v-btn text @click="e1 = 2">Back</v-btn>
+          <v-btn color="primary" @click="verifyEvaluation">{{$t('continue')}}</v-btn>
+          <v-btn text @click="e1 = 2">{{$t('back')}}</v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="4">
           <v-card class="mb-12" flat>
-            <v-subheader class="title">Mandatory items</v-subheader>
+            <v-subheader class="title">{{$t('experience.mandatory')}}</v-subheader>
             <v-row>
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listGamification"
                   dense
-                  label="Gamification Component"
+                  v-bind:label="$t('components.type1')"
                   v-model="data.evaluation.gamification"
                   required
                   :rules="rules"
@@ -220,8 +250,9 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/GamificationComponent?action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/GamificationComponent?action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row>
@@ -229,7 +260,7 @@
                 <v-autocomplete
                   :items="listTechnological"
                   dense
-                  label="Technological Component"
+                  v-bind:label="$t('components.type4')"
                   v-model="data.evaluation.technological"
                   multiple
                   chips
@@ -243,8 +274,9 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/additionalComponent?typeComponent=Technological&action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/additionalComponent?typeComponent=Technological&action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row v-if="webNecessary">
@@ -252,7 +284,7 @@
                 <v-autocomplete
                   :items="listWeb"
                   dense
-                  label="Web 2.0 Component"
+                  v-bind:label="$t('components.type3')"
                   v-model="data.evaluation.web20"
                   multiple
                   chips
@@ -265,8 +297,9 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/additionalComponent?typeComponent=Web2.0&action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row v-if="traditionalNecessary">
@@ -274,7 +307,7 @@
                 <v-autocomplete
                   :items="listTraditional"
                   dense
-                  label="Traditional Component"
+                  v-bind:label="$t('components.type2')"
                   v-model="data.evaluation.traditional"
                   multiple
                   chips
@@ -287,18 +320,23 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/traditionalComponent?action=Create"
-                >Create new...</v-btn>
+                  :to='localePath("/newComponent/traditionalComponent?action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
-            <v-subheader class="title" v-if="!webNecessary || !traditionalNecessary">Optional items</v-subheader>
+            <v-subheader
+              class="title"
+              v-if="!webNecessary || !traditionalNecessary"
+              >{{$t('experience.optional')}}</v-subheader
+            >
 
             <v-row v-if="!webNecessary">
               <v-col cols="12" sm="10">
                 <v-autocomplete
                   :items="listWeb"
                   dense
-                  label="Web 2.0 Component"
+                   v-bind:label="$t('components.type3')"
                   v-model="data.evaluation.web20"
                   multiple
                   chips
@@ -309,8 +347,10 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/additionalComponent?typeComponent=Web2.0&action=Create"
-                >Create new...</v-btn>
+                
+                  :to='localePath("/newComponent/additionalComponent?typeComponent=Web2.0&action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
             <v-row v-if="!traditionalNecessary">
@@ -318,7 +358,7 @@
                 <v-autocomplete
                   :items="listTraditional"
                   dense
-                  label="Traditional Component"
+                  v-bind:label="$t('components.type2')"
                   v-model="data.evaluation.traditional"
                   multiple
                   chips
@@ -329,15 +369,17 @@
                 <v-btn
                   text
                   color="primary"
-                  to="/newComponent/traditionalComponent?action=Create"
-                >Create new...</v-btn>
+                 
+                  :to='localePath("/newComponent/traditionalComponent?action=Create")'
+                  >{{$t('experience.add')}}</v-btn
+                >
               </v-col>
             </v-row>
           </v-card>
 
-          <v-btn color="primary" type="submit">Create</v-btn>
+          <v-btn color="primary" type="submit">{{$t('save')}}</v-btn>
 
-          <v-btn text @click="e1 = 3">Back</v-btn>
+          <v-btn text @click="e1 = 3">{{$t('back')}}</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -354,7 +396,7 @@ export default {
   middleware: "authenticatedAdmin",
   data() {
     return {
-      config:"",
+      config: "",
       subjectMatter: "",
       listSubject: [],
       listGamification: [],
@@ -397,17 +439,17 @@ export default {
       traditionalNecessary: false,
       items: [
         {
-          text: "Index ",
+          text: this.$t("subject.route"),
           disabled: false,
           to: "/",
         },
         {
-          text: `Gamification Experience`,
+          text: this.$t("subject.route2"),
           disabled: true,
           href: "/gamificationExperience",
         },
         {
-          text: `Define Experience`,
+          text: this.$t("experience.title"),
           disabled: true,
           to: "/",
         },
@@ -416,7 +458,7 @@ export default {
   },
   mounted() {
     this.config = {
-      headers: { authorization: Cookie.get("auth") }
+      headers: { authorization: Cookie.get("auth") },
     };
     this.getAllComponents();
   },
@@ -430,7 +472,7 @@ export default {
           subjectMatter: this.subjectMatter,
           data: this.data,
         };
-        createExperience(info,this.config)
+        createExperience(info, this.config)
           .then((response) => {
             this.$refs.form.reset();
             this.textSnackbar = "Created successfully";
@@ -472,7 +514,7 @@ export default {
       }
     },
     getAllComponents() {
-      getComponents(Cookie.get("id"),this.config)
+      getComponents(Cookie.get("id"), this.config)
         .then((response) => {
           let aux = response.data.data;
           console.log(aux);
