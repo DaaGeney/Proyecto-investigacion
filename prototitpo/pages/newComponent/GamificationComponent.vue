@@ -61,9 +61,9 @@
               required
             ></v-textarea>
             <v-text-field
-              :rules="rules"
               v-model="url"
               label="URL"
+              placeholder="www.example.com"
               counter
               required
             ></v-text-field>
@@ -142,6 +142,26 @@
                 </v-tooltip>
               </v-col>
             </v-row>
+            <v-list subheader two-line>
+                
+                <v-subheader inset>Files</v-subheader>
+
+                <v-list-item v-for="file in learningObjetive" :key="file.name">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="file.name"></v-list-item-title>
+
+                    <v-list-item-subtitle
+                     
+                    >csdsd</v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
             <v-textarea
               :rules="rules"
               v-model="studentsInstructions"
@@ -389,7 +409,7 @@ export default {
     },
     getAllObjetives: function () {
       getObjetives(this.config).then((response) => {
-        this.list = response.data.data.map((e) => e.name);
+        this.list = response.data.data.map((e) => e.description);
       });
       getSubjects(this.config).then((response) => {
         this.listSubject = response.data.data.map((e) => e.topic);
